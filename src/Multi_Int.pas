@@ -325,8 +325,10 @@ type
     FParts: array[0..Multi_X4_maxi] of INT_1W_U;
   public
     function ToString: ansistring; inline;
-    function ToHexString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring; inline;
-    function ToBinaryString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring; inline;
+    function ToHexString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
+      inline;
+    function ToBinaryString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
+      inline;
     function FromHexString(const A: ansistring): TMultiIntX4; inline;
     function FromBinaryString(const A: ansistring): TMultiIntX4; inline;
     function HasOverflow: boolean; inline;
@@ -390,8 +392,10 @@ type
   public
     procedure Initialize; inline;
     function ToString: ansistring; inline;
-    function ToHexString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring; inline;
-    function ToBinaryString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring; inline;
+    function ToHexString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
+      inline;
+    function ToBinaryString(const LZ: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
+      inline;
     function FromHexString(const A: ansistring): TMultiIntXV; inline;
     function FromBinaryString(const A: ansistring): TMultiIntXV; inline;
     function HasOverflow: boolean; inline;
@@ -611,33 +615,24 @@ function To_Multi_Int_X4(const A: Multi_Int_X5): TMultiIntX4; forward; overload;
 (******************************************)
 procedure TMultiUBool.Initialize(A: TMultiUBoolState);
 begin
-  if (A = uBoolTrue) then
-  begin
-    FValue := uBoolTrue;
-  end
-  else if (A = uBoolFalse) then
-  begin
-    FValue := uBoolFalse;
-  end
-  else
-  begin
-    FValue := uBoolUndefined;
-  end;
+  FValue := A;
 end;
 
 function TMultiUBool.ToString: ansistring;
 begin
-  if (FValue = uBoolTrue) then
-  begin
-    Result := 'TRUE';
-  end
-  else if (FValue = uBoolFalse) then
-  begin
-    Result := 'FALSE';
-  end
-  else
-  begin
-    Result := 'UNDEFINED';
+  case FValue of
+    uBoolTrue:
+    begin
+      Result := 'TRUE';
+    end;
+    uBoolFalse:
+    begin
+      Result := 'FALSE';
+    end;
+    uBoolUndefined:
+    begin
+      Result := 'UNDEFINED';
+    end;
   end;
 end;
 
@@ -665,195 +660,124 @@ end;
 
 class operator TMultiUBool.:=(A: TMultiUBool): boolean;
 begin
-  if (A.FValue = uBoolTrue) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := (A.FValue = uBoolTrue);
 end;
 
 class operator TMultiUBool.=(A, B: TMultiUBool): boolean;
 begin
-  if (A.FValue = B.FValue) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := (A.FValue = B.FValue);
 end;
 
 class operator TMultiUBool.<>(A, B: TMultiUBool): boolean;
 begin
-  if (A.FValue <> B.FValue) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := not (A = B);
 end;
 
 class operator TMultiUBool.or(A, B: TMultiUBool): boolean;
 begin
-  if (A.FValue = uBoolTrue) or (B.FValue = uBoolTrue) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := (A.FValue = uBoolTrue) or (B.FValue = uBoolTrue);
 end;
 
 class operator TMultiUBool.or(A: TMultiUBool; B: boolean): boolean;
 begin
-  if (A.FValue = uBoolTrue) or (B) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := (A.FValue = uBoolTrue) or B;
 end;
 
 class operator TMultiUBool.or(A: boolean; B: TMultiUBool): boolean;
 begin
-  if (A) or (B.FValue = uBoolTrue) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := A or (B.FValue = uBoolTrue);
 end;
 
 class operator TMultiUBool.and(A, B: TMultiUBool): boolean;
 begin
-  if (A.FValue = uBoolTrue) and (B.FValue = uBoolTrue) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := (A.FValue = uBoolTrue) and (B.FValue = uBoolTrue);
 end;
 
 class operator TMultiUBool.and(A: TMultiUBool; B: boolean): boolean;
 begin
-  if (A.FValue = uBoolTrue) and (B) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := (A.FValue = uBoolTrue) and B;
 end;
 
 class operator TMultiUBool.and(A: boolean; B: TMultiUBool): boolean;
 begin
-  if (A) and (B.FValue = uBoolTrue) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := A and (B.FValue = uBoolTrue);
 end;
 
 class operator TMultiUBool.not(A: TMultiUBool): boolean;
 begin
-  if (A.FValue = uBoolTrue) then
-  begin
-    Result := False;
-  end
-  else if (A.FValue = uBoolFalse) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
+  Result := not (A.FValue = uBoolTrue);
 end;
 
 
-{$ifdef CPU_32}
-(******************************************)
-function nlz_bits(P_x: INT_1W_U): INT_1W_U;
+function LeadingZeroCount(A: INT_1W_U): INT_1W_U;
 var
   n: TMultiInt32;
-  x, t: INT_1W_U;
 begin
-  if (P_x = 0) then
+  if A = 0 then
   begin
-    Result := 16;
-  end
-  else
-  begin
-    x := P_x;
-    n := 0;
-    t := (x and INT_1W_U(65280));
-    if (t = 0) then
-    begin
-      n := (n + 8);
-      x := (x << 8);
-    end;
-
-    t := (x and INT_1W_U(61440));
-    if (t = 0) then
-    begin
-      n := (n + 4);
-      x := (x << 4);
-    end;
-
-    t := (x and INT_1W_U(49152));
-    if (t = 0) then
-    begin
-      n := (n + 2);
-      x := (x << 2);
-    end;
-
-    t := (x and INT_1W_U(32768));
-    if (t = 0) then
-    begin
-      n := (n + 1);
-    end;
-    Result := n;
+    {$ifdef CPU_32}
+    Exit(16);
+    {$else}
+      Exit(32)
+    {$endif}
   end;
+
+  n := 0;
+
+  {$ifdef CPU_32}
+  if (A and $FF00) = 0 then
+  begin
+    Inc(n, 8);
+    A := A shl 8;
+  end;
+
+  if (A and $F000) = 0 then
+  begin
+    Inc(n, 4);
+    A := A shl 4;
+  end;
+
+  if (A and $C000) = 0 then
+  begin
+    Inc(n, 2);
+    A := A shl 2;
+  end;
+
+  if (A and $8000) = 0 then
+  begin
+    Inc(n);
+  end;
+  {$else}
+   if (A shr 16) = 0 then
+    begin
+      Inc(n, 16);
+      A := A shl 16;
+    end;
+
+    if (A shr 24) = 0 then
+    begin
+      Inc(n, 8);
+      A := A shl 8;
+    end;
+
+    if (A shr 28) = 0 then
+    begin
+      Inc(n, 4);
+      A := A shl 4;
+    end;
+
+    if (A shr 30) = 0 then
+    begin
+      Inc(n, 2);
+      A := A shl 2;
+    end;
+
+    if (A shr 31) = 0 then
+      Inc(n);
+  {$endif}
+
+  Result := n;
 end;
-
-{$endif}
-
-
-{$ifdef CPU_64}
-(******************************************)
-function nlz_bits(x:INT_1W_U):INT_1W_U;
-var     n       :TMultiInt32;
-begin
-if (x = 0) then Result:= 32
-else
-        begin
-        n:= 1;
-        if      ((x >> 16) = 0) then begin n:=(n + 16); x:=(x << 16); end;
-        if      ((x >> 24) = 0) then begin n:=(n + 8); x:=(x << 8); end;
-        if      ((x >> 28) = 0) then begin n:=(n + 4); x:=(x << 4); end;
-        if      ((x >> 30) = 0) then begin n:=(n + 2); x:=(x << 2); end;
-        n:= (n - (x >> 31));
-        Result:= n;
-        end;
-end;
-{$endif}
 
 
 {
@@ -863,175 +787,99 @@ TMultiIntX2
 }
 
 function ABS_greaterthan_Multi_Int_X2(const A, B: TMultiIntX2): boolean;
+var
+  i: integer;
 begin
-  if (A.FParts[3] > B.FParts[3]) then
+  for i := 3 downto 0 do
   begin
-    Result := True;
-    exit;
-  end
-  else
-  if (A.FParts[3] < B.FParts[3]) then
-  begin
-    Result := False;
-    exit;
-  end
-  else
-  if (A.FParts[2] > B.FParts[2]) then
-  begin
-    Result := True;
-    exit;
-  end
-  else
-  if (A.FParts[2] < B.FParts[2]) then
-  begin
-    Result := False;
-    exit;
-  end
-  else
-  if (A.FParts[1] > B.FParts[1]) then
-  begin
-    Result := True;
-    exit;
-  end
-  else
-  if (A.FParts[1] < B.FParts[1]) then
-  begin
-    Result := False;
-    exit;
-  end
-  else
-  if (A.FParts[0] > B.FParts[0]) then
-  begin
-    Result := True;
-    exit;
-  end
-  else
-  begin
-    Result := False;
-    exit;
+    if A.FParts[i] > B.FParts[i] then
+    begin
+      Exit(True);
+    end;
+
+    if A.FParts[i] < B.FParts[i] then
+    begin
+      Exit(False);
+    end;
   end;
+
+  Result := False;
 end;
 
 
 (******************************************)
 function ABS_lessthan_Multi_Int_X2(const A, B: TMultiIntX2): boolean;
+var
+  i: integer;
 begin
-  if (A.FParts[3] < B.FParts[3]) then
+  for i := 3 downto 0 do
   begin
-    Result := True;
-    exit;
-  end
-  else
-  if (A.FParts[3] > B.FParts[3]) then
-  begin
-    Result := False;
-    exit;
-  end
-  else
-  if (A.FParts[2] < B.FParts[2]) then
-  begin
-    Result := True;
-    exit;
-  end
-  else
-  if (A.FParts[2] > B.FParts[2]) then
-  begin
-    Result := False;
-    exit;
-  end
-  else
-  if (A.FParts[1] < B.FParts[1]) then
-  begin
-    Result := True;
-    exit;
-  end
-  else
-  if (A.FParts[1] > B.FParts[1]) then
-  begin
-    Result := False;
-    exit;
-  end
-  else
-  if (A.FParts[0] < B.FParts[0]) then
-  begin
-    Result := True;
-    exit;
-  end
-  else
-  begin
-    Result := False;
-    exit;
+    if A.FParts[i] < B.FParts[i] then
+    begin
+      Exit(True);
+    end;
+
+    if A.FParts[i] > B.FParts[i] then
+    begin
+      Exit(False);
+    end;
   end;
+
+  Result := False;
 end;
 
 
 (******************************************)
 function ABS_equal_Multi_Int_X2(const A, B: TMultiIntX2): boolean;
+var
+  i: integer;
 begin
   Result := True;
-  if (A.FParts[3] <> B.FParts[3]) then
+
+  for i := 3 downto 0 do
   begin
-    Result := False;
-  end
-  else
-  if (A.FParts[2] <> B.FParts[2]) then
-  begin
-    Result := False;
-  end
-  else
-  if (A.FParts[1] <> B.FParts[1]) then
-  begin
-    Result := False;
-  end
-  else
-  if (A.FParts[0] <> B.FParts[0]) then
-  begin
-    Result := False;
+    if A.FParts[i] <> B.FParts[i] then
+    begin
+      Exit(False);
+    end;
   end;
 end;
-
 
 (******************************************)
 function ABS_notequal_Multi_Int_X2(const A, B: TMultiIntX2): boolean;
 begin
-  Result := (not ABS_equal_Multi_Int_X2(A, B));
+  Result := not ABS_equal_Multi_Int_X2(A, B);
 end;
 
 
 (******************************************)
-function nlz_words_X2(m: TMultiIntX2): INT_1W_U;
+function LeadingZeroCountX2(A: TMultiIntX2): INT_1W_U;
 var
-  i, n: TMultiInt32;
-  fini: boolean;
+  i: integer;
+  leadingZerosCount: TMultiInt32;
 begin
-  n    := 0;
-  i    := Multi_X2_maxi;
-  fini := False;
-  repeat
-    if (i < 0) then
+  leadingZerosCount := 0;
+
+  for i := Multi_X2_maxi downto 0 do
+  begin
+    if A.FParts[i] <> 0 then
     begin
-      fini := True;
-    end
-    else if (m.FParts[i] <> 0) then
-    begin
-      fini := True;
-    end
-    else
-    begin
-      Inc(n);
-      Dec(i);
+      Exit(leadingZerosCount);
     end;
-  until fini;
-  Result := n;
+
+    Inc(leadingZerosCount);
+  end;
+
+  Result := leadingZerosCount;
 end;
 
 
 (******************************************)
-function nlz_MultiBits_X2(const A: TMultiIntX2): INT_1W_U;
+function LeadingZeroCountMultiBitsX2(const A: TMultiIntX2): INT_1W_U;
 var
-  w: INT_1W_U;
+  leadingZeroParts: INT_1W_U;
 begin
-  if (not A.FIsDefined) then
+  if not A.FIsDefined then
   begin
     Result := 0;
     Multi_Int_ERROR := True;
@@ -1041,15 +889,17 @@ begin
     end;
   end;
 
-  w := nlz_words_X2(A);
-  if (w <= Multi_X2_maxi) then
+  leadingZeroParts := LeadingZeroCountX2(A);
+
+  if leadingZeroParts <= Multi_X2_maxi then
   begin
     Result :=
-      nlz_bits(A.FParts[Multi_X2_maxi - w]) + (w * INT_1W_SIZE);
+      LeadingZeroCount(A.FParts[Multi_X2_maxi - leadingZeroParts]) +
+      (leadingZeroParts * INT_1W_SIZE);
   end
   else
   begin
-    Result := (w * INT_1W_SIZE);
+    Result := (leadingZeroParts * INT_1W_SIZE);
   end;
 end;
 
@@ -1057,14 +907,14 @@ end;
 (******************************************)
 function TMultiIntX2.IsDefined: boolean; inline;
 begin
-  Result := self.FIsDefined;
+  Result := Self.FIsDefined;
 end;
 
 
 (******************************************)
 function TMultiIntX2.HasOverflow: boolean; inline;
 begin
-  Result := self.FHasOverflow;
+  Result := Self.FHasOverflow;
 end;
 
 
@@ -1078,7 +928,7 @@ end;
 (******************************************)
 function TMultiIntX2.IsNegative: boolean; inline;
 begin
-  Result := self.FIsNegative;
+  Result := Self.FIsNegative;
 end;
 
 
@@ -1095,7 +945,7 @@ begin
   Result := A;
   Result.FIsNegative := uBoolFalse;
 
-  if (not A.FIsDefined) then
+  if not A.FIsDefined then
   begin
     Multi_Int_ERROR := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -1116,20 +966,10 @@ end;
 (******************************************)
 function Multi_Int_X2_Odd(const A: TMultiIntX2): boolean; inline;
 var
-  bit1_mask: INT_1W_U;
+  Mask: INT_1W_U;
 begin
-  bit1_mask := $1;
 
-  if ((A.FParts[0] and bit1_mask) = bit1_mask) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := False;
-  end;
-
-  if (not A.FIsDefined) then
+  if not A.FIsDefined then
   begin
     Multi_Int_ERROR := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -1138,6 +978,8 @@ begin
     end;
   end;
 
+  Mask   := $1;
+  Result := (A.FParts[0] and Mask) = Mask;
 end;
 
 
@@ -1150,30 +992,8 @@ end;
 
 (******************************************)
 function Multi_Int_X2_Even(const A: TMultiIntX2): boolean; inline;
-var
-  bit1_mask: INT_1W_U;
 begin
-
-  bit1_mask := $1;
-
-  if ((A.FParts[0] and bit1_mask) = bit1_mask) then
-  begin
-    Result := False;
-  end
-  else
-  begin
-    Result := True;
-  end;
-
-  if (not A.FIsDefined) then
-  begin
-    Multi_Int_ERROR := True;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-  end;
-
+  Result := not Odd(A);
 end;
 
 
@@ -1184,85 +1004,74 @@ begin
 end;
 
 
+{$ifdef CPU_64}
+procedure ShiftUp_NBits_Multi_Int_X2(var A: TMultiIntX2; NBits: INT_1W_U);
+var
+  Mask, NBitsCarry: INT_1W_U;
+  i: Integer;
+
+  procedure ShiftPart(var Part: INT_1W_U; const N: INT_1W_U); inline;
+  begin
+    Part := INT_1W_U((Part shl N) and INT_1W_U_MAXINT);
+  end;
+begin
+  if NBits = 0 then
+     Exit;
+
+  Mask := $FFFF;
+  NBitsCarry := INT_1W_SIZE - NBits;
+  ShiftPart(Mask, NBitsCarry);
+
+  if NBits > NBitsMax then
+     raise ERangeError.Create('NBits exceeds the size of a part.');
+
+  for i := 0 to 3 do
+    ShiftPart(A.FParts[i], (A.FParts[i] and Mask) shr NBitsCarry);
+end;
+{$endif}
+
 {$ifdef CPU_32}
 (******************************************)
 procedure ShiftUp_NBits_Multi_Int_X2(var A: TMultiIntX2; NBits: INT_1W_U);
 var
-  carry_bits_1, carry_bits_2, carry_bits_mask, NBits_max, NBits_carry: INT_1W_U;
+  Mask, NBitsCarry: INT_1W_U;
+  i: integer;
+  carry_bits_1, carry_bits_2: INT_1W_U;
 
-  procedure INT_1W_U_shl(var A: INT_1W_U; const nbits: INT_1W_U); inline;
-  var
-    carry_bits_mask_2w: INT_2W_U;
+  procedure ShiftPart(var Part: INT_1W_U; const N: INT_1W_U;
+  const CarryBits: INT_1W_U); inline;
   begin
-    carry_bits_mask_2w := A;
-    carry_bits_mask_2w := (carry_bits_mask_2w << NBits);
-    A := INT_1W_U(carry_bits_mask_2w and INT_1W_U_MAXINT);
+    Part := (Part shl N) or CarryBits;
+    Part := INT_1W_U(Part and INT_1W_U_MAXINT);
   end;
 
 begin
-  if NBits > 0 then
+  if NBits = 0 then
   begin
-
-    carry_bits_mask := $FFFF;
-    NBits_max   := INT_1W_SIZE;
-    NBits_carry := (NBits_max - NBits);
-    INT_1W_U_shl(carry_bits_mask, NBits_carry);
-
-    if NBits <= NBits_max then
-    begin
-      carry_bits_1 := ((A.FParts[0] and carry_bits_mask) >> NBits_carry);
-      INT_1W_U_shl(A.FParts[0], NBits);
-
-      carry_bits_2 := ((A.FParts[1] and carry_bits_mask) >> NBits_carry);
-      INT_1W_U_shl(A.FParts[1], NBits);
-      A.FParts[1] := (A.FParts[1] or carry_bits_1);
-
-      carry_bits_1 := ((A.FParts[2] and carry_bits_mask) >> NBits_carry);
-      INT_1W_U_shl(A.FParts[2], NBits);
-      A.FParts[2] := (A.FParts[2] or carry_bits_2);
-
-      INT_1W_U_shl(A.FParts[3], NBits);
-      A.FParts[3] := (A.FParts[3] or carry_bits_1);
-    end;
+    Exit;
   end;
 
+  Mask := $FFFFFFFF;
+  NBitsCarry := INT_1W_SIZE - NBits;
+  Mask := (Mask shl NBitsCarry);
+
+  if NBits > INT_1W_SIZE then
+  begin
+    raise ERangeError.Create('NBits exceeds the size of a part.');
+  end;
+
+  carry_bits_1 := ((A.FParts[0] and Mask) shr NBitsCarry);
+  ShiftPart(A.FParts[0], NBits, 0);
+
+  carry_bits_2 := ((A.FParts[1] and Mask) shr NBitsCarry);
+  ShiftPart(A.FParts[1], NBits, carry_bits_1);
+
+  carry_bits_1 := ((A.FParts[2] and Mask) shr NBitsCarry);
+  ShiftPart(A.FParts[2], NBits, carry_bits_2);
+
+  ShiftPart(A.FParts[3], NBits, carry_bits_1);
 end;
-{$endif}
 
-{$ifdef CPU_64}
-(******************************************)
-procedure ShiftUp_NBits_Multi_Int_X2(Var A:TMultiIntX2; NBits:INT_1W_U);
-var     carry_bits_1,
-        carry_bits_2,
-        carry_bits_mask,
-        NBits_max,
-        NBits_carry     :INT_1W_U;
-begin
-if NBits > 0 then
-        begin
-
-        carry_bits_mask:= $FFFFFFFF;
-        NBits_max:= INT_1W_SIZE;
-        NBits_carry:= (NBits_max - NBits);
-
-        carry_bits_mask:= (carry_bits_mask << NBits_carry);
-
-        if NBits <= NBits_max then
-                begin
-                carry_bits_1:= ((A.FParts[0] and carry_bits_mask) >> NBits_carry);
-                A.FParts[0]:= (A.FParts[0] << NBits);
-
-                carry_bits_2:= ((A.FParts[1] and carry_bits_mask) >> NBits_carry);
-                A.FParts[1]:= ((A.FParts[1] << NBits) OR carry_bits_1);
-
-                carry_bits_1:= ((A.FParts[2] and carry_bits_mask) >> NBits_carry);
-                A.FParts[2]:= ((A.FParts[2] << NBits) OR carry_bits_2);
-
-                A.FParts[3]:= ((A.FParts[3] << NBits) OR carry_bits_1);
-                end;
-        end;
-
-end;
 {$endif}
 
 
@@ -1271,27 +1080,26 @@ procedure ShiftUp_NWords_Multi_Int_X2(var A: TMultiIntX2; NWords: INT_1W_U);
 var
   n: INT_1W_U;
 begin
-  if (NWords > 0) then
+  if NWords <= 0 then
   begin
-    if (NWords <= Multi_X2_maxi) then
-    begin
-      n := NWords;
-      while (n > 0) do
-      begin
-        A.FParts[3] := A.FParts[2];
-        A.FParts[2] := A.FParts[1];
-        A.FParts[1] := A.FParts[0];
-        A.FParts[0] := 0;
-        Dec(n);
-      end;
-    end
-    else
-    begin
-      A.FParts[0] := 0;
-      A.FParts[1] := 0;
-      A.FParts[2] := 0;
-      A.FParts[3] := 0;
-    end;
+    Exit;
+  end;
+
+  if NWords > Multi_X2_maxi then
+  begin
+    A.FParts[0] := 0;
+    A.FParts[1] := 0;
+    A.FParts[2] := 0;
+    A.FParts[3] := 0;
+    Exit;
+  end;
+
+  for n := 0 to NWords - 1 do
+  begin
+    A.FParts[3] := A.FParts[2];
+    A.FParts[2] := A.FParts[1];
+    A.FParts[1] := A.FParts[0];
+    A.FParts[0] := 0;
   end;
 end;
 
@@ -1299,9 +1107,9 @@ end;
 {******************************************}
 procedure ShiftUp_MultiBits_Multi_Int_X2(var A: TMultiIntX2; NBits: INT_1W_U);
 var
-  NWords_count, NBits_count: INT_1W_U;
+  WordCount, BitCount: INT_1W_U;
 begin
-  if (not A.FIsDefined) then
+  if not A.FIsDefined then
   begin
     Multi_Int_ERROR := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -1311,58 +1119,57 @@ begin
     exit;
   end;
 
-  if (NBits > 0) then
+  if NBits = 0 then
   begin
-    if (NBits >= INT_1W_SIZE) then
-    begin
-      NWords_count := (NBits div INT_1W_SIZE);
-      NBits_count  := (NBits mod INT_1W_SIZE);
-      ShiftUp_NWords_Multi_Int_X2(A, NWords_count);
-    end
-    else
-    begin
-      NBits_count := NBits;
-    end;
-    ShiftUp_NBits_Multi_Int_X2(A, NBits_count);
+    Exit;
   end;
+
+  if NBits >= INT_1W_SIZE then
+  begin
+    WordCount := (NBits div INT_1W_SIZE);
+    BitCount  := (NBits mod INT_1W_SIZE);
+    ShiftUp_NWords_Multi_Int_X2(A, WordCount);
+  end
+  else
+  begin
+    BitCount := NBits;
+  end;
+
+  ShiftUp_NBits_Multi_Int_X2(A, BitCount);
 end;
 
 
 (******************************************)
 procedure ShiftDown_NBits_Multi_Int_X2(var A: TMultiIntX2; NBits: INT_1W_U);
 var
-  carry_bits_1, carry_bits_2, carry_bits_mask, NBits_max, NBits_carry: INT_1W_U;
+  CarryBits: array[0..3] of INT_1W_U;
+  NBitsCarry, Mask: INT_1W_U;
 begin
-
   if NBits > 0 then
   begin
     {$ifdef CPU_32}
-    carry_bits_mask := $FFFF;
+    Mask := $FFFF;
     {$endif}
     {$ifdef CPU_64}
-        carry_bits_mask:= $FFFFFFFF;
+      Mask := $FFFFFFFF;
     {$endif}
 
-    NBits_max   := INT_1W_SIZE;
-    NBits_carry := (NBits_max - NBits);
-    carry_bits_mask := (carry_bits_mask >> NBits_carry);
+    NBitsCarry := INT_1W_SIZE - NBits;
+    Mask := (Mask shr NBitsCarry);
 
-    if NBits <= NBits_max then
-    begin
-      carry_bits_1 := ((A.FParts[3] and carry_bits_mask) << NBits_carry);
-      A.FParts[3]  := (A.FParts[3] >> NBits);
+    CarryBits[3] := ((A.FParts[3] and Mask) shl NBitsCarry);
+    A.FParts[3]  := (A.FParts[3] shr NBits);
 
-      carry_bits_2 := ((A.FParts[2] and carry_bits_mask) << NBits_carry);
-      A.FParts[2]  := ((A.FParts[2] >> NBits) or carry_bits_1);
+    CarryBits[2] := ((A.FParts[2] and Mask) shl NBitsCarry);
+    A.FParts[2]  := ((A.FParts[2] shr NBits) or CarryBits[3]);
 
-      carry_bits_1 := ((A.FParts[1] and carry_bits_mask) << NBits_carry);
-      A.FParts[1]  := ((A.FParts[1] >> NBits) or carry_bits_2);
+    CarryBits[1] := ((A.FParts[1] and Mask) shl NBitsCarry);
+    A.FParts[1]  := ((A.FParts[1] shr NBits) or CarryBits[2]);
 
-      A.FParts[0] := ((A.FParts[0] >> NBits) or carry_bits_1);
-    end;
+    A.FParts[0] := ((A.FParts[0] shr NBits) or CarryBits[1]);
   end;
-
 end;
+
 
 
 (******************************************)
@@ -1370,27 +1177,26 @@ procedure ShiftDown_NWords_Multi_Int_X2(var A: TMultiIntX2; NWords: INT_1W_U);
 var
   n: INT_1W_U;
 begin
-  if (NWords > 0) then
+  if NWords <= 0 then
   begin
-    if (NWords <= Multi_X2_maxi) then
-    begin
-      n := NWords;
-      while (n > 0) do
-      begin
-        A.FParts[0] := A.FParts[1];
-        A.FParts[1] := A.FParts[2];
-        A.FParts[2] := A.FParts[3];
-        A.FParts[3] := 0;
-        Dec(n);
-      end;
-    end
-    else
-    begin
-      A.FParts[0] := 0;
-      A.FParts[1] := 0;
-      A.FParts[2] := 0;
-      A.FParts[3] := 0;
-    end;
+    Exit;
+  end;
+
+  if NWords > Multi_X2_maxi then
+  begin
+    A.FParts[0] := 0;
+    A.FParts[1] := 0;
+    A.FParts[2] := 0;
+    A.FParts[3] := 0;
+    Exit;
+  end;
+
+  for n := 0 to NWords - 1 do
+  begin
+    A.FParts[3] := A.FParts[2];
+    A.FParts[2] := A.FParts[1];
+    A.FParts[1] := A.FParts[0];
+    A.FParts[0] := 0;
   end;
 end;
 
@@ -1398,9 +1204,9 @@ end;
 {******************************************}
 procedure ShiftDown_MultiBits_Multi_Int_X2(var A: TMultiIntX2; NBits: INT_1W_U);
 var
-  NWords_count, NBits_count: INT_1W_U;
+  WordCount, BitCount: INT_1W_U;
 begin
-  if (not A.FIsDefined) then
+  if not A.FIsDefined then
   begin
     Multi_Int_ERROR := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -1412,16 +1218,16 @@ begin
 
   if (NBits >= INT_1W_SIZE) then
   begin
-    NWords_count := (NBits div INT_1W_SIZE);
-    NBits_count  := (NBits mod INT_1W_SIZE);
-    ShiftDown_NWords_Multi_Int_X2(A, NWords_count);
+    WordCount := NBits div INT_1W_SIZE;
+    BitCount  := NBits mod INT_1W_SIZE;
+    ShiftDown_NWords_Multi_Int_X2(A, WordCount);
   end
   else
   begin
-    NBits_count := NBits;
+    BitCount := NBits;
   end;
 
-  ShiftDown_NBits_Multi_Int_X2(A, NBits_count);
+  ShiftDown_NBits_Multi_Int_X2(A, BitCount);
 end;
 
 
@@ -1444,115 +1250,23 @@ end;
 (******************************************)
 class operator TMultiIntX2.<=(const A, B: TMultiIntX2): boolean;
 begin
-  if (not A.FIsDefined) or (not B.FIsDefined) or (A.FHasOverflow) or
-    (B.FHasOverflow) then
-  begin
-    Result := False;
-    Multi_Int_ERROR := True;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-    exit;
-  end;
-
-  Result := False;
-  if ((A.FIsNegative = False) and (B.FIsNegative = True)) then
-  begin
-    Result := False;
-  end
-  else
-  if ((A.FIsNegative = True) and (B.FIsNegative = False)) then
-  begin
-    Result := True;
-  end
-  else
-  if ((A.FIsNegative = False) and (B.FIsNegative = False)) then
-  begin
-    Result := (not ABS_greaterthan_Multi_Int_X2(A, B));
-  end
-  else
-  if ((A.FIsNegative = True) and (B.FIsNegative = True)) then
-  begin
-    Result := (not ABS_lessthan_Multi_Int_X2(A, B));
-  end;
+  Result := not (A > B);
 end;
 
 
 (******************************************)
 class operator TMultiIntX2.>=(const A, B: TMultiIntX2): boolean;
 begin
-  if (not A.FIsDefined) or (not B.FIsDefined) or (A.FHasOverflow) or
-    (B.FHasOverflow) then
-  begin
-    Result := False;
-    Multi_Int_ERROR := True;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-    exit;
-  end;
-
-  Result := False;
-  if ((A.FIsNegative = False) and (B.FIsNegative = True)) then
-  begin
-    Result := True;
-  end
-  else
-  if ((A.FIsNegative = True) and (B.FIsNegative = False)) then
-  begin
-    Result := False;
-  end
-  else
-  if ((A.FIsNegative = False) and (B.FIsNegative = False)) then
-  begin
-    Result := (not ABS_lessthan_Multi_Int_X2(A, B));
-  end
-  else
-  if ((A.FIsNegative = True) and (B.FIsNegative = True)) then
-  begin
-    Result := (not ABS_greaterthan_Multi_Int_X2(A, B));
-  end;
+  Result := not (B > A);
 end;
 
 
 (******************************************)
 class operator TMultiIntX2.>(const A, B: TMultiIntX2): boolean;
 begin
-  if (not A.FIsDefined) or (not B.FIsDefined) or (A.FHasOverflow) or
-    (B.FHasOverflow) then
-  begin
-    Result := False;
-    Multi_Int_ERROR := True;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-    exit;
-  end;
-
-  Result := False;
-  if ((A.FIsNegative = False) and (B.FIsNegative = True)) then
-  begin
-    Result := True;
-  end
-  else
-  if ((A.FIsNegative = True) and (B.FIsNegative = False)) then
-  begin
-    Result := False;
-  end
-  else
-  if ((A.FIsNegative = False) and (B.FIsNegative = False)) then
-  begin
-    Result := ABS_greaterthan_Multi_Int_X2(A, B);
-  end
-  else
-  if ((A.FIsNegative = True) and (B.FIsNegative = True)) then
-  begin
-    Result := ABS_lessthan_Multi_Int_X2(A, B);
-  end;
+  Result := (B < A);
 end;
+
 
 
 (******************************************)
@@ -1561,31 +1275,31 @@ begin
   if (not A.FIsDefined) or (not B.FIsDefined) or (A.FHasOverflow) or
     (B.FHasOverflow) then
   begin
-    Result := False;
     Multi_Int_ERROR := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
-      raise EInterror.Create('Uninitialised variable');
+      raise EInterror.Create('Uninitialized variable');
     end;
-    exit;
+    Result := False;
+    Exit;
   end;
 
-  Result := False;
-  if ((A.FIsNegative = True) and (B.FIsNegative = False)) then
+  if A.FIsNegative <> B.FIsNegative then
   begin
-    Result := True;
-  end
-  else
-  if ((A.FIsNegative = False) and (B.FIsNegative = False)) then
-  begin
-    Result := ABS_lessthan_Multi_Int_X2(A, B);
-  end
-  else
-  if ((A.FIsNegative = True) and (B.FIsNegative = True)) then
+    Result := A.FIsNegative;
+    Exit;
+  end;
+
+  if A.FIsNegative then
   begin
     Result := ABS_greaterthan_Multi_Int_X2(A, B);
+  end
+  else
+  begin
+    Result := ABS_lessthan_Multi_Int_X2(A, B);
   end;
 end;
+
 
 
 (******************************************)
@@ -1618,146 +1332,137 @@ end;
 (******************************************)
 class operator TMultiIntX2.<>(const A, B: TMultiIntX2): boolean;
 begin
-  if (not A.FIsDefined) or (not B.FIsDefined) or (A.FHasOverflow) or
-    (B.FHasOverflow) then
-  begin
-    Result := False;
-    Multi_Int_ERROR := True;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-    exit;
-  end;
-
-  Result := False;
-  if (A.FIsNegative <> B.FIsNegative) then
-  begin
-    Result := True;
-  end
-  else
-  begin
-    Result := (not ABS_equal_Multi_Int_X2(A, B));
-  end;
+  Result := not (A = B);
 end;
 
 
 (******************************************)
-procedure String_to_Multi_Int_X2(const A: ansistring; out mi: TMultiIntX2); inline;
-label
-  999;
+procedure String_to_Multi_Int_X2(const A: ansistring; out m: TMultiIntX2); inline;
 var
-  i, b, c, e: INT_2W_U;
-  M_Val: array[0..Multi_X2_maxi] of INT_2W_U;
-  Signeg, Zeroneg: boolean;
+  i, startIndex, currentIndex, endIndex: INT_2W_U;
+  Parts: array[0..Multi_X2_maxi] of INT_2W_U;
+  IsNegative, IsZero: boolean;
 begin
   Multi_Int_ERROR := False;
 
-  mi.FHasOverflow := False;
-  mi.FIsDefined := True;
-  mi.FIsNegative := False;
-  Signeg  := False;
-  Zeroneg := False;
+  m.FHasOverflow := False;
+  m.FIsDefined := True;
+  m.FIsNegative := False;
+  IsNegative  := False;
+  IsZero := False;
 
-  M_Val[0] := 0;
-  M_Val[1] := 0;
-  M_Val[2] := 0;
-  M_Val[3] := 0;
+  Parts[0] := 0;
+  Parts[1] := 0;
+  Parts[2] := 0;
+  Parts[3] := 0;
 
-  if (length(A) > 0) then
+  if Length(A) = 0 then
   begin
-    b := low(ansistring);
-    e := b + INT_2W_U(length(A)) - 1;
-    if (A[b] = '-') then
+    Exit;
+  end;
+
+    startIndex := low(ansistring);
+    endIndex := startIndex + INT_2W_U(length(A)) - 1;
+
+    if A[startIndex] = '-' then
     begin
-      Signeg := True;
-      Inc(b);
+      IsNegative := True;
+      Inc(startIndex);
     end;
 
-    c := b;
-    while (c <= e) do
+    currentIndex := startIndex;
+    while currentIndex <= endIndex do
     begin
       try
-        i := StrToInt(A[c]);
+        i := StrToInt(A[currentIndex]);
       except
         on EConvertError do
         begin
           Multi_Int_ERROR := True;
-          mi.FHasOverflow := True;
-          mi.FIsDefined   := False;
+          m.FHasOverflow := True;
+          m.FIsDefined   := False;
           if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
           begin
             raise;
           end;
+          Exit;
         end;
       end;
-      if mi.FIsDefined = False then
-      begin
-        goto 999;
-      end;
-      M_Val[0] := (M_Val[0] * 10) + i;
-      M_Val[1] := (M_Val[1] * 10);
-      M_Val[2] := (M_Val[2] * 10);
-      M_Val[3] := (M_Val[3] * 10);
 
-      if M_Val[0] > INT_1W_U_MAXINT then
+      Parts[0] := (Parts[0] * 10) + i;
+      Parts[1] := (Parts[1] * 10);
+      Parts[2] := (Parts[2] * 10);
+      Parts[3] := (Parts[3] * 10);
+
+      if Parts[0] > INT_1W_U_MAXINT then
       begin
-        M_Val[1] := M_Val[1] + (M_Val[0] div INT_1W_U_MAXINT_1);
-        M_Val[0] := (M_Val[0] mod INT_1W_U_MAXINT_1);
+        Parts[1] := Parts[1] + (Parts[0] div INT_1W_U_MAXINT_1);
+        Parts[0] := (Parts[0] mod INT_1W_U_MAXINT_1);
       end;
 
-      if M_Val[1] > INT_1W_U_MAXINT then
+      if Parts[1] > INT_1W_U_MAXINT then
       begin
-        M_Val[2] := M_Val[2] + (M_Val[1] div INT_1W_U_MAXINT_1);
-        M_Val[1] := (M_Val[1] mod INT_1W_U_MAXINT_1);
+        Parts[2] := Parts[2] + (Parts[1] div INT_1W_U_MAXINT_1);
+        Parts[1] := (Parts[1] mod INT_1W_U_MAXINT_1);
       end;
 
-      if M_Val[2] > INT_1W_U_MAXINT then
+      if Parts[2] > INT_1W_U_MAXINT then
       begin
-        M_Val[3] := M_Val[3] + (M_Val[2] div INT_1W_U_MAXINT_1);
-        M_Val[2] := (M_Val[2] mod INT_1W_U_MAXINT_1);
+        Parts[3] := Parts[3] + (Parts[2] div INT_1W_U_MAXINT_1);
+        Parts[2] := (Parts[2] mod INT_1W_U_MAXINT_1);
       end;
 
-      if M_Val[3] > INT_1W_U_MAXINT then
+      if Parts[3] > INT_1W_U_MAXINT then
       begin
         Multi_Int_ERROR := True;
-        mi.FIsDefined   := False;
-        mi.FHasOverflow := True;
+        m.FIsDefined   := False;
+        m.FHasOverflow := True;
         if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
         begin
           raise EIntOverflow.Create('Overflow');
         end;
-        goto 999;
+
+        Exit;
       end;
 
-      Inc(c);
+      Inc(currentIndex);
     end;
+
+  m.FParts[0] := Parts[0];
+  m.FParts[1] := Parts[1];
+  m.FParts[2] := Parts[2];
+  m.FParts[3] := Parts[3];
+
+  if (Parts[0] = 0) and (Parts[1] = 0) and (Parts[2] = 0) and (Parts[3] = 0) then
+  begin
+    IsZero := True;
   end;
 
-  mi.FParts[0] := M_Val[0];
-  mi.FParts[1] := M_Val[1];
-  mi.FParts[2] := M_Val[2];
-  mi.FParts[3] := M_Val[3];
+  m.FIsNegative := IsNegative;
+end;
 
-  if (M_Val[0] = 0) and (M_Val[1] = 0) and (M_Val[2] = 0) and (M_Val[3] = 0) then
+
+procedure Handle_Uninitialised_Overflow(var Result: TMultiIntX2; const IsDefined, HasOverflow: Boolean);
+begin
+  Result.FIsDefined := IsDefined;
+  Result.FHasOverflow := HasOverflow;
+
+  if not IsDefined then
   begin
-    Zeroneg := True;
+    Multi_Int_ERROR := True;
+    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
+      raise EInterror.Create('Uninitialised variable');
+    Exit;
   end;
 
-  if Zeroneg then
+  if HasOverflow then
   begin
-    mi.FIsNegative := uBoolFalse;
-  end
-  else if Signeg then
-  begin
-    mi.FIsNegative := uBoolTrue;
-  end
-  else
-  begin
-    mi.FIsNegative := uBoolFalse;
+    Multi_Int_ERROR := True;
+    Result.FHasOverflow := True;
+    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
+      raise EInterror.Create('Overflow');
+    Exit;
   end;
-
-  999: ;
 end;
 
 
@@ -1766,38 +1471,12 @@ function To_Multi_Int_X2(const A: TMultiIntX3): TMultiIntX2;
 var
   n: INT_1W_U;
 begin
-  Result.FHasOverflow := A.FHasOverflow;
-  Result.FIsDefined   := A.FIsDefined;
-  Result.FIsNegative  := A.FIsNegative;
+  Handle_Uninitialised_Overflow(Result, A.FIsDefined, A.FHasOverflow);
 
-  if (A.FIsDefined = False) then
+  if A.FIsDefined then
   begin
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-    Multi_Int_ERROR   := True;
-    Result.FIsDefined := False;
-    exit;
-  end;
-
-  if (A.FHasOverflow = True) or (A > Multi_Int_X2_MAXINT) then
-  begin
-    Multi_Int_ERROR     := True;
-    Result.FHasOverflow := True;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Overflow');
-    end;
-    Multi_Int_ERROR := True;
-    exit;
-  end;
-
-  n := 0;
-  while (n <= Multi_X2_maxi) do
-  begin
-    Result.FParts[n] := A.FParts[n];
-    Inc(n);
+    for n := 0 to Multi_X2_maxi do
+      Result.FParts[n] := A.FParts[n];
   end;
 end;
 
@@ -1807,117 +1486,55 @@ function To_Multi_Int_X2(const A: TMultiIntX4): TMultiIntX2;
 var
   n: INT_1W_U;
 begin
-  Result.FHasOverflow := A.FHasOverflow;
-  Result.FIsDefined   := A.FIsDefined;
-  Result.FIsNegative  := A.FIsNegative;
+  Handle_Uninitialised_Overflow(Result, A.FIsDefined, A.FHasOverflow);
 
-  if (A.FIsDefined = False) then
+  if A.FIsDefined then
   begin
-    Multi_Int_ERROR   := True;
-    Result.FIsDefined := False;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-    exit;
-  end;
-
-  if (A.FHasOverflow = True) or (A > Multi_Int_X2_MAXINT) then
-  begin
-    Multi_Int_ERROR     := True;
-    Result.FHasOverflow := True;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Overflow');
-    end;
-    exit;
-  end;
-
-  n := 0;
-  while (n <= Multi_X2_maxi) do
-  begin
-    Result.FParts[n] := A.FParts[n];
-    Inc(n);
+    for n := 0 to Multi_X2_maxi do
+      Result.FParts[n] := A.FParts[n];
   end;
 end;
 
 
 (******************************************)
 function To_Multi_Int_X2(const A: TMultiIntXV): TMultiIntX2;
-label
-  OVERFLOW_BRANCH, CLEAN_EXIT;
 var
   n: INT_2W_U;
 begin
-  if (A.FIsDefined = False) then
-  begin
-    Multi_Int_ERROR   := True;
-    Result.FIsDefined := False;
-    if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-    begin
-      raise EInterror.Create('Uninitialised variable');
-    end;
-    exit;
-  end;
+  Handle_Uninitialised_Overflow(Result, A.FIsDefined, A.FHasOverflow);
 
-  if (A.FHasOverflow = True) then
+  if A.FIsDefined then
   begin
-    goto OVERFLOW_BRANCH;
-  end;
-
-  Result.FHasOverflow := A.FHasOverflow;
-  Result.FIsDefined   := A.FIsDefined;
-  Result.FIsNegative  := A.FIsNegative;
-
-  n := 0;
-  if (Multi_XV_size > Multi_X2_size) then
-  begin
-    while (n <= Multi_X2_maxi) do
+    if Multi_XV_size > Multi_X2_size then
     begin
-      Result.FParts[n] := A.FParts[n];
-      Inc(n);
-    end;
-    while (n <= Multi_XV_maxi) do
-    begin
-      if (A.FParts[n] <> 0) then
+      for n := 0 to Multi_X2_maxi do
+        Result.FParts[n] := A.FParts[n];
+
+      for n := Multi_X2_maxi + 1 to Multi_XV_maxi do
       begin
-        goto OVERFLOW_BRANCH;
+        if A.FParts[n] <> 0 then
+        begin
+          Multi_Int_ERROR := True;
+          Result.FHasOverflow := True;
+          if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
+            raise EInterror.Create('Overflow');
+          Exit;
+        end;
       end;
-      Inc(n);
-    end;
-  end
-  else
-  begin
-    while (n <= Multi_XV_maxi) do
+    end
+    else
     begin
-      Result.FParts[n] := A.FParts[n];
-      Inc(n);
-    end;
-    while (n <= Multi_X2_maxi) do
-    begin
-      Result.FParts[n] := 0;
-      Inc(n);
+      for n := 0 to Multi_XV_maxi do
+        Result.FParts[n] := A.FParts[n];
+
+      for n := Multi_XV_maxi + 1 to Multi_X2_maxi do
+        Result.FParts[n] := 0;
     end;
   end;
-
-  goto CLEAN_EXIT;
-
-  OVERFLOW_BRANCH:
-
-    Multi_Int_ERROR   := True;
-  Result.FHasOverflow := True;
-  if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
-  begin
-    raise EInterror.Create('Overflow');
-  end;
-  exit;
-
-  CLEAN_EXIT: ;
 
 end;
 
 
-(******************************************)
 class operator TMultiIntX2.:=(const A: ansistring): TMultiIntX2;
 begin
   String_to_Multi_Int_X2(A, Result);
@@ -1926,32 +1543,23 @@ end;
 
 {$ifdef CPU_32}
 (******************************************)
-procedure INT_4W_S_to_Multi_Int_X2(const A: INT_4W_S; out mi: TMultiIntX2); inline;
+procedure INT_4W_S_to_Multi_Int_X2(const A: INT_4W_S; out m: TMultiIntX2); inline;
 var
   v: INT_4W_U;
 begin
-  mi.FHasOverflow := False;
-  mi.FIsDefined := True;
-  v := Abs(A);
-
+  m.FHasOverflow := False;
+  m.FIsDefined := True;
   v := A;
-  mi.FParts[0] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
-  v := (v div INT_1W_U_MAXINT_1);
-  mi.FParts[1] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
-  v := (v div INT_1W_U_MAXINT_1);
-  mi.FParts[2] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
-  v := (v div INT_1W_U_MAXINT_1);
-  mi.FParts[3] := v;
 
-  if (A < 0) then
-  begin
-    mi.FIsNegative := uBoolTrue;
-  end
-  else
-  begin
-    mi.FIsNegative := uBoolFalse;
-  end;
+  m.FParts[0] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
+  v := v div INT_1W_U_MAXINT_1;
+  m.FParts[1] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
+  v := v div INT_1W_U_MAXINT_1;
+  m.FParts[2] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
+  v := v div INT_1W_U_MAXINT_1;
+  m.FParts[3] := v;
 
+  m.FIsNegative := (A < 0);
 end;
 
 
@@ -1963,22 +1571,22 @@ end;
 
 
 (******************************************)
-procedure INT_4W_U_to_Multi_Int_X2(const A: INT_4W_U; out mi: TMultiIntX2); inline;
+procedure INT_4W_U_to_Multi_Int_X2(const A: INT_4W_U; out m: TMultiIntX2); inline;
 var
   v: INT_4W_U;
 begin
-  mi.FHasOverflow := False;
-  mi.FIsDefined   := True;
-  mi.FIsNegative  := uBoolFalse;
+  m.FHasOverflow := False;
+  m.FIsDefined   := True;
+  m.FIsNegative  := False;
 
   v := A;
-  mi.FParts[0] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
+  m.FParts[0] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
   v := (v div INT_1W_U_MAXINT_1);
-  mi.FParts[1] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
+  m.FParts[1] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
   v := (v div INT_1W_U_MAXINT_1);
-  mi.FParts[2] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
+  m.FParts[2] := INT_1W_U(v mod INT_1W_U_MAXINT_1);
   v := (v div INT_1W_U_MAXINT_1);
-  mi.FParts[3] := v;
+  m.FParts[3] := v;
 
 end;
 
@@ -1992,26 +1600,25 @@ end;
 
 
 (******************************************)
-procedure INT_2W_S_to_Multi_Int_X2(const A: INT_2W_S; out mi: TMultiIntX2); inline;
+procedure INT_2W_S_to_Multi_Int_X2(const A: INT_2W_S; out m: TMultiIntX2); inline;
 begin
-  mi.FHasOverflow := False;
-  mi.FIsDefined   := True;
-  mi.FParts[2]    := 0;
-  mi.FParts[3]    := 0;
+  m.FHasOverflow := False;
+  m.FIsDefined   := True;
+  m.FParts[2]    := 0;
+  m.FParts[3]    := 0;
 
-  if (A < 0) then
+  m.FIsNegative := (A < 0);
+
+  if m.FIsNegative then
   begin
-    mi.FIsNegative := uBoolTrue;
-    mi.FParts[0]   := (ABS(A) mod INT_1W_U_MAXINT_1);
-    mi.FParts[1]   := (ABS(A) div INT_1W_U_MAXINT_1);
+    m.FParts[0]   := (Abs(A) mod INT_1W_U_MAXINT_1);
+    m.FParts[1]   := (Abs(A) div INT_1W_U_MAXINT_1);
   end
   else
   begin
-    mi.FIsNegative := uBoolFalse;
-    mi.FParts[0]   := (A mod INT_1W_U_MAXINT_1);
-    mi.FParts[1]   := (A div INT_1W_U_MAXINT_1);
+    m.FParts[0]   := (A mod INT_1W_U_MAXINT_1);
+    m.FParts[1]   := (A div INT_1W_U_MAXINT_1);
   end;
-
 end;
 
 
@@ -2023,16 +1630,17 @@ end;
 
 
 (******************************************)
-procedure INT_2W_U_to_Multi_Int_X2(const A: INT_2W_U; out mi: TMultiIntX2); inline;
+procedure INT_2W_U_to_Multi_Int_X2(const A: INT_2W_U; out m: TMultiIntX2); inline;
 begin
-  mi.FHasOverflow := False;
-  mi.FIsDefined   := True;
-  mi.FIsNegative  := uBoolFalse;
+  m.FHasOverflow := False;
+  m.FIsDefined   := True;
+  m.FIsNegative  := uBoolFalse;
 
-  mi.FParts[0] := (A mod INT_1W_U_MAXINT_1);
-  mi.FParts[1] := (A div INT_1W_U_MAXINT_1);
-  mi.FParts[2] := 0;
-  mi.FParts[3] := 0;
+  m.FParts[0] := (A mod INT_1W_U_MAXINT_1);
+  m.FParts[1] := (A div INT_1W_U_MAXINT_1);
+
+  m.FParts[2] := 0;
+  m.FParts[3] := 0;
 end;
 
 
@@ -2047,16 +1655,17 @@ end;
 // WARNING Float to Multi_Int type conversion loses some precision
 class operator TMultiIntX2.:=(const A: single): TMultiIntX2;
 var
-  R: TMultiIntX2;
-  R_FLOATREC: TFloatRec;
+  Temp: TMultiIntX2;
+  FloatRec: TFloatRec;
 begin
   Multi_Int_ERROR := False;
 
-  FloatToDecimal(R_FLOATREC, A, SINGLE_TYPE_PRECISION_DIGITS, 0);
-  String_to_Multi_Int_X2(AddCharR('0', AnsiLeftStr(R_FLOATREC.digits,
-    (SINGLE_TYPE_PRECISION_DIGITS - 1)), R_FLOATREC.Exponent), R);
+  FloatToDecimal(FloatRec, A, SINGLE_TYPE_PRECISION_DIGITS, 0);
 
-  if (R.HasOverflow) then
+  String_to_Multi_Int_X2(AddCharR('0', AnsiLeftStr(FloatRec.digits,
+    (SINGLE_TYPE_PRECISION_DIGITS - 1)), FloatRec.Exponent), Temp);
+
+  if Temp.HasOverflow then
   begin
     Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
@@ -2065,14 +1674,12 @@ begin
     begin
       raise EIntOverflow.Create('Overflow');
     end;
-    exit;
+    Exit;
   end;
 
-  if (R_FLOATREC.Negative) then
-  begin
-    R.FIsNegative := True;
-  end;
-  Result := R;
+  Temp.FIsNegative := FloatRec.Negative;
+
+  Result := Temp;
 end;
 
 
@@ -2080,16 +1687,17 @@ end;
 // WARNING Float to Multi_Int type conversion loses some precision
 class operator TMultiIntX2.:=(const A: real): TMultiIntX2;
 var
-  R: TMultiIntX2;
-  R_FLOATREC: TFloatRec;
+  Temp: TMultiIntX2;
+  FloatRec: TFloatRec;
 begin
   Multi_Int_ERROR := False;
 
-  FloatToDecimal(R_FLOATREC, A, REAL_TYPE_PRECISION_DIGITS, 0);
-  String_to_Multi_Int_X2(AddCharR('0', AnsiLeftStr(R_FLOATREC.digits,
-    (REAL_TYPE_PRECISION_DIGITS - 1)), R_FLOATREC.Exponent), R);
+  FloatToDecimal(FloatRec, A, REAL_TYPE_PRECISION_DIGITS, 0);
 
-  if (R.HasOverflow) then
+  String_to_Multi_Int_X2(AddCharR('0', AnsiLeftStr(FloatRec.digits,
+    (REAL_TYPE_PRECISION_DIGITS - 1)), FloatRec.Exponent), Temp);
+
+  if Temp.HasOverflow then
   begin
     Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
@@ -2098,14 +1706,12 @@ begin
     begin
       raise EIntOverflow.Create('Overflow');
     end;
-    exit;
+    Exit;
   end;
 
-  if (R_FLOATREC.Negative) then
-  begin
-    R.FIsNegative := True;
-  end;
-  Result := R;
+  Temp.FIsNegative := FloatRec.Negative;
+
+  Result := Temp;
 end;
 
 
@@ -2113,16 +1719,17 @@ end;
 // WARNING Float to Multi_Int type conversion loses some precision
 class operator TMultiIntX2.:=(const A: double): TMultiIntX2;
 var
-  R: TMultiIntX2;
-  R_FLOATREC: TFloatRec;
+  Temp: TMultiIntX2;
+  FloatRec: TFloatRec;
 begin
   Multi_Int_ERROR := False;
 
-  FloatToDecimal(R_FLOATREC, A, DOUBLE_TYPE_PRECISION_DIGITS, 0);
-  String_to_Multi_Int_X2(AddCharR('0', AnsiLeftStr(R_FLOATREC.digits,
-    (DOUBLE_TYPE_PRECISION_DIGITS - 1)), R_FLOATREC.Exponent), R);
+  FloatToDecimal(FloatRec, A, DOUBLE_TYPE_PRECISION_DIGITS, 0);
 
-  if (R.HasOverflow) then
+  String_to_Multi_Int_X2(AddCharR('0', AnsiLeftStr(FloatRec.digits,
+    (DOUBLE_TYPE_PRECISION_DIGITS - 1)), FloatRec.Exponent), Temp);
+
+  if Temp.HasOverflow then
   begin
     Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
@@ -2131,49 +1738,50 @@ begin
     begin
       raise EIntOverflow.Create('Overflow');
     end;
-    exit;
+    Exit;
   end;
 
-  if (R_FLOATREC.Negative) then
-  begin
-    R.FIsNegative := True;
-  end;
-  Result := R;
+  Temp.FIsNegative := FloatRec.Negative;
+
+  Result := Temp;
 end;
 
 
 (******************************************)
 class operator TMultiIntX2.:=(const A: TMultiIntX2): single;
 var
-  R, V, M: single;
+  ResultValue, TempValue, Multiplier: single;
   i: INT_1W_U;
-  finished: boolean;
+  OverflowDetected: boolean;
 begin
-  if (not A.FIsDefined) then
+  if not A.FIsDefined then
   begin
     Result := 0;
+
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Uninitialised variable');
     end;
+
     exit;
   end;
 
   Multi_Int_ERROR := False;
-  finished := False;
-  M := INT_1W_U_MAXINT_1;
+  OverflowDetected := False;
+  Multiplier := INT_1W_U_MAXINT_1;
 
-  R := A.FParts[0];
+  ResultValue := A.FParts[0];
+
   i := 1;
-  while (i <= Multi_X2_maxi) and (not Multi_Int_ERROR) do
+  while (i <= Multi_X2_maxi) and not Multi_Int_ERROR do
   begin
-    if (not finished) then
+    if not OverflowDetected then
     begin
-      V := A.FParts[i];
+      TempValue := A.FParts[i];
       try
         begin
-          V := (V * M);
-          R := R + V;
+          TempValue := TempValue * Multiplier;
+          ResultValue := ResultValue + TempValue;
         end
       except
         begin
@@ -2184,11 +1792,12 @@ begin
           end;
         end;
       end;
-      V := INT_1W_U_MAXINT_1;
+
+      TempValue := INT_1W_U_MAXINT_1;
       try
-        M := (M * V);
+        Multiplier := (Multiplier * TempValue);
       except
-        finished := True;
+        OverflowDetected := True;
       end;
     end
     else
@@ -2207,20 +1816,20 @@ begin
 
   if A.FIsNegative then
   begin
-    R := (-R);
+    ResultValue := -ResultValue;
   end;
-  Result := R;
+  Result := ResultValue;
 end;
 
 
 (******************************************)
 class operator TMultiIntX2.:=(const A: TMultiIntX2): real;
 var
-  R, V, M: real;
+  ResultValue, TempValue, Multiplier: real;
   i: INT_1W_U;
-  finished: boolean;
+  OverflowDetected: boolean;
 begin
-  if (not A.FIsDefined) then
+  if not A.FIsDefined then
   begin
     Result := 0;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -2231,20 +1840,20 @@ begin
   end;
 
   Multi_Int_ERROR := False;
-  finished := False;
-  M := INT_1W_U_MAXINT_1;
+  OverflowDetected := False;
+  Multiplier := INT_1W_U_MAXINT_1;
 
-  R := A.FParts[0];
+  ResultValue := A.FParts[0];
   i := 1;
-  while (i <= Multi_X2_maxi) and (not Multi_Int_ERROR) do
+  while (i <= Multi_X2_maxi) and not Multi_Int_ERROR do
   begin
-    if (not finished) then
+    if not OverflowDetected then
     begin
-      V := A.FParts[i];
+      TempValue := A.FParts[i];
       try
         begin
-          V := (V * M);
-          R := R + V;
+          TempValue := (TempValue * Multiplier);
+          ResultValue := ResultValue + TempValue;
         end
       except
         begin
@@ -2255,11 +1864,11 @@ begin
           end;
         end;
       end;
-      V := INT_1W_U_MAXINT_1;
+      TempValue := INT_1W_U_MAXINT_1;
       try
-        M := (M * V);
+        Multiplier := Multiplier * TempValue;
       except
-        finished := True;
+        OverflowDetected := True;
       end;
     end
     else
@@ -2278,9 +1887,10 @@ begin
 
   if A.FIsNegative then
   begin
-    R := (-R);
+    ResultValue := -ResultValue;
   end;
-  Result := R;
+
+  Result := ResultValue;
 end;
 
 
@@ -2515,8 +2125,8 @@ begin
     exit;
   end;
 
-  if (A.FParts[0] > UINT8_MAX) or (A.FParts[1] <> 0) or
-    (A.FParts[2] <> 0) or (A.FParts[3] <> 0) then
+  if (A.FParts[0] > UINT8_MAX) or (A.FParts[1] <> 0) or (A.FParts[2] <> 0) or
+    (A.FParts[3] <> 0) then
   begin
     Multi_Int_ERROR := True;
     Result := 0;
@@ -2545,8 +2155,8 @@ begin
     exit;
   end;
 
-  if (A.FParts[0] > INT8_MAX) or (A.FParts[1] <> 0) or
-    (A.FParts[2] <> 0) or (A.FParts[3] <> 0) then
+  if (A.FParts[0] > INT8_MAX) or (A.FParts[1] <> 0) or (A.FParts[2] <> 0) or
+    (A.FParts[3] <> 0) then
   begin
     Multi_Int_ERROR := True;
     Result := 0;
@@ -2746,7 +2356,7 @@ end;
 function TMultiIntX2.ToBinaryString(
   const LeadingZeroMode: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_X2_to_bin(self, Result, LeadingZeroMode);
+  Multi_Int_X2_to_bin(Self, Result, LeadingZeroMode);
 end;
 
 
@@ -2802,7 +2412,7 @@ end;
 (******************************************)
 function TMultiIntX2.ToHexString(const LeadingZeroMode: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_X2_to_hex(self, Result, LeadingZeroMode);
+  Multi_Int_X2_to_hex(Self, Result, LeadingZeroMode);
 end;
 
 
@@ -3004,7 +2614,7 @@ end;
 (******************************************)
 function TMultiIntX2.ToString: ansistring;
 begin
-  Multi_Int_X2_to_String(self, Result);
+  Multi_Int_X2_to_String(Self, Result);
 end;
 
 
@@ -3955,7 +3565,7 @@ begin
     dividend := P_dividend;
     dividend.FIsNegative := False;
 
-    shiftup_bits_dividor := nlz_bits(dividor.FParts[dividor_non_zero_pos]);
+    shiftup_bits_dividor := LeadingZeroCount(dividor.FParts[dividor_non_zero_pos]);
     if (shiftup_bits_dividor > 0) then
     begin
       ShiftUp_NBits_Multi_Int_X3(dividend, shiftup_bits_dividor);
@@ -4508,14 +4118,14 @@ end;
 (******************************************)
 function TMultiIntX3.HasOverflow: boolean; inline;
 begin
-  Result := self.FHasOverflow;
+  Result := Self.FHasOverflow;
 end;
 
 
 (******************************************)
 function TMultiIntX3.IsDefined: boolean; inline;
 begin
-  Result := self.FIsDefined;
+  Result := Self.FIsDefined;
 end;
 
 
@@ -4536,7 +4146,7 @@ end;
 (******************************************)
 function TMultiIntX3.IsNegative: boolean; inline;
 begin
-  Result := self.FIsNegative;
+  Result := Self.FIsNegative;
 end;
 
 
@@ -4683,7 +4293,7 @@ begin
   if (w <= Multi_X3_maxi) then
   begin
     Result :=
-      nlz_bits(A.FParts[Multi_X3_maxi - w]) + (w * INT_1W_SIZE);
+      LeadingZeroCount(A.FParts[Multi_X3_maxi - w]) + (w * INT_1W_SIZE);
   end
   else
   begin
@@ -6416,7 +6026,7 @@ end;
 (******************************************)
 function TMultiIntX3.ToBinaryString(const LZ: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_X3_to_bin(self, Result, LZ);
+  Multi_Int_X3_to_bin(Self, Result, LZ);
 end;
 
 
@@ -6473,7 +6083,7 @@ end;
 (******************************************)
 function TMultiIntX3.ToHexString(const LZ: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_X3_to_hex(self, Result, LZ);
+  Multi_Int_X3_to_hex(Self, Result, LZ);
 end;
 
 
@@ -6683,7 +6293,7 @@ end;
 (******************************************)
 function TMultiIntX3.ToString: ansistring;
 begin
-  Multi_Int_X3_to_String(self, Result);
+  Multi_Int_X3_to_String(Self, Result);
 end;
 
 
@@ -7755,7 +7365,7 @@ begin
     dividend := P_dividend;
     dividend.FIsNegative := False;
 
-    shiftup_bits_dividor := nlz_bits(dividor.FParts[dividor_non_zero_pos]);
+    shiftup_bits_dividor := LeadingZeroCount(dividor.FParts[dividor_non_zero_pos]);
     if (shiftup_bits_dividor > 0) then
     begin
       ShiftUp_NBits_Multi_Int_X4(dividend, shiftup_bits_dividor);
@@ -8368,14 +7978,14 @@ end;
 (******************************************)
 function TMultiIntX4.HasOverflow: boolean; inline;
 begin
-  Result := self.FHasOverflow;
+  Result := Self.FHasOverflow;
 end;
 
 
 (******************************************)
 function TMultiIntX4.IsDefined: boolean; inline;
 begin
-  Result := self.FIsDefined;
+  Result := Self.FIsDefined;
 end;
 
 
@@ -8396,7 +8006,7 @@ end;
 (******************************************)
 function TMultiIntX4.IsNegative: boolean; inline;
 begin
-  Result := self.FIsNegative;
+  Result := Self.FIsNegative;
 end;
 
 
@@ -8543,7 +8153,7 @@ begin
   if (w <= Multi_X4_maxi) then
   begin
     Result :=
-      nlz_bits(A.FParts[Multi_X4_maxi - w]) + (w * INT_1W_SIZE);
+      LeadingZeroCount(A.FParts[Multi_X4_maxi - w]) + (w * INT_1W_SIZE);
   end
   else
   begin
@@ -8726,25 +8336,25 @@ carry_bits_mask:= $FFFFFFFF;
     begin
 
       carry_bits_1 := ((A.FParts[7] and carry_bits_mask) << NBits_carry);
-      A.FParts[7] := (A.FParts[7] >> NBits);
+      A.FParts[7]  := (A.FParts[7] >> NBits);
 
       carry_bits_2 := ((A.FParts[6] and carry_bits_mask) << NBits_carry);
-      A.FParts[6] := ((A.FParts[6] >> NBits) or carry_bits_1);
+      A.FParts[6]  := ((A.FParts[6] >> NBits) or carry_bits_1);
 
       carry_bits_1 := ((A.FParts[5] and carry_bits_mask) << NBits_carry);
-      A.FParts[5] := ((A.FParts[5] >> NBits) or carry_bits_2);
+      A.FParts[5]  := ((A.FParts[5] >> NBits) or carry_bits_2);
 
       carry_bits_2 := ((A.FParts[4] and carry_bits_mask) << NBits_carry);
-      A.FParts[4] := ((A.FParts[4] >> NBits) or carry_bits_1);
+      A.FParts[4]  := ((A.FParts[4] >> NBits) or carry_bits_1);
 
       carry_bits_1 := ((A.FParts[3] and carry_bits_mask) << NBits_carry);
-      A.FParts[3] := ((A.FParts[3] >> NBits) or carry_bits_2);
+      A.FParts[3]  := ((A.FParts[3] >> NBits) or carry_bits_2);
 
       carry_bits_2 := ((A.FParts[2] and carry_bits_mask) << NBits_carry);
-      A.FParts[2] := ((A.FParts[2] >> NBits) or carry_bits_1);
+      A.FParts[2]  := ((A.FParts[2] >> NBits) or carry_bits_1);
 
       carry_bits_1 := ((A.FParts[1] and carry_bits_mask) << NBits_carry);
-      A.FParts[1] := ((A.FParts[1] >> NBits) or carry_bits_2);
+      A.FParts[1]  := ((A.FParts[1] >> NBits) or carry_bits_2);
 
       A.FParts[0] := ((A.FParts[0] >> NBits) or carry_bits_1);
 
@@ -9082,7 +8692,7 @@ var
 begin
   if (A.FIsDefined = False) then
   begin
-    Multi_Int_ERROR     := True;
+    Multi_Int_ERROR   := True;
     Result.FIsDefined := False;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
@@ -9097,8 +8707,8 @@ begin
   end;
 
   Result.FHasOverflow := A.FHasOverflow;
-  Result.FIsDefined  := A.FIsDefined;
-  Result.FIsNegative := A.FIsNegative;
+  Result.FIsDefined   := A.FIsDefined;
+  Result.FIsNegative  := A.FIsNegative;
 
   n := 0;
   if (Multi_XV_size > Multi_X4_size) then
@@ -9135,7 +8745,7 @@ begin
 
   OVERFLOW_BRANCH:
 
-    Multi_Int_ERROR    := True;
+    Multi_Int_ERROR   := True;
   Result.FHasOverflow := True;
   if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
   begin
@@ -9193,8 +8803,8 @@ var
   n: INT_1W_U;
 begin
   Result.FHasOverflow := A.FHasOverflow;
-  Result.FIsDefined  := A.FIsDefined;
-  Result.FIsNegative := A.FIsNegative;
+  Result.FIsDefined   := A.FIsDefined;
+  Result.FIsNegative  := A.FIsNegative;
 
   if (A.FIsDefined = False) then
   begin
@@ -9237,8 +8847,8 @@ var
   n: INT_1W_U;
 begin
   Result.FHasOverflow := A.FHasOverflow;
-  Result.FIsDefined  := A.FIsDefined;
-  Result.FIsNegative := A.FIsNegative;
+  Result.FIsDefined   := A.FIsDefined;
+  Result.FIsNegative  := A.FIsNegative;
 
   if (A.FIsDefined = False) then
   begin
@@ -9282,13 +8892,13 @@ var
   n: INT_1W_U;
 begin
   MI.FHasOverflow := A.FHasOverflow;
-  MI.FIsDefined  := A.FIsDefined;
-  MI.FIsNegative := A.FIsNegative;
+  MI.FIsDefined   := A.FIsDefined;
+  MI.FIsNegative  := A.FIsNegative;
 
   if (A.FIsDefined = False) then
   begin
     Multi_Int_ERROR := True;
-    MI.FIsDefined := False;
+    MI.FIsDefined   := False;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -9298,7 +8908,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    Multi_Int_ERROR  := True;
+    Multi_Int_ERROR := True;
     MI.FHasOverflow := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
@@ -9336,13 +8946,13 @@ var
   n: INT_1W_U;
 begin
   MI.FHasOverflow := A.FHasOverflow;
-  MI.FIsDefined  := A.FIsDefined;
-  MI.FIsNegative := A.FIsNegative;
+  MI.FIsDefined   := A.FIsDefined;
+  MI.FIsNegative  := A.FIsNegative;
 
   if (A.FIsDefined = False) then
   begin
     Multi_Int_ERROR := True;
-    MI.FIsDefined := False;
+    MI.FIsDefined   := False;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -9352,7 +8962,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    Multi_Int_ERROR  := True;
+    Multi_Int_ERROR := True;
     MI.FHasOverflow := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
@@ -9427,9 +9037,9 @@ begin
       except
         on EConvertError do
         begin
-          mi.FIsDefined  := False;
+          mi.FIsDefined   := False;
           mi.FHasOverflow := True;
-          Multi_Int_ERROR  := True;
+          Multi_Int_ERROR := True;
           if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
           begin
             raise;
@@ -9493,9 +9103,9 @@ begin
 
       if M_Val[7] > INT_1W_U_MAXINT then
       begin
-        mi.FIsDefined  := False;
+        mi.FIsDefined   := False;
         mi.FHasOverflow := True;
-        Multi_Int_ERROR  := True;
+        Multi_Int_ERROR := True;
         if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
         begin
           raise EIntOverflow.Create('Overflow');
@@ -9626,7 +9236,7 @@ end;
 procedure INT_2W_S_to_Multi_Int_X4(const A: INT_2W_S; out mi: TMultiIntX4); inline;
 begin
   mi.FHasOverflow := False;
-  mi.FIsDefined  := True;
+  mi.FIsDefined   := True;
   mi.FParts[2]    := 0;
   mi.FParts[3]    := 0;
   mi.FParts[4]    := 0;
@@ -9637,14 +9247,14 @@ begin
   if (A < 0) then
   begin
     mi.FIsNegative := uBoolTrue;
-    mi.FParts[0]    := (ABS(A) mod INT_1W_U_MAXINT_1);
-    mi.FParts[1]    := (ABS(A) div INT_1W_U_MAXINT_1);
+    mi.FParts[0]   := (ABS(A) mod INT_1W_U_MAXINT_1);
+    mi.FParts[1]   := (ABS(A) div INT_1W_U_MAXINT_1);
   end
   else
   begin
     mi.FIsNegative := uBoolFalse;
-    mi.FParts[0]    := (A mod INT_1W_U_MAXINT_1);
-    mi.FParts[1]    := (A div INT_1W_U_MAXINT_1);
+    mi.FParts[0]   := (A mod INT_1W_U_MAXINT_1);
+    mi.FParts[1]   := (A div INT_1W_U_MAXINT_1);
   end;
 end;
 
@@ -9660,8 +9270,8 @@ end;
 procedure INT_2W_U_to_Multi_Int_X4(const A: INT_2W_U; out mi: TMultiIntX4); inline;
 begin
   mi.FHasOverflow := False;
-  mi.FIsDefined  := True;
-  mi.FIsNegative := uBoolFalse;
+  mi.FIsDefined   := True;
+  mi.FIsNegative  := uBoolFalse;
 
   mi.FParts[0] := (A mod INT_1W_U_MAXINT_1);
   mi.FParts[1] := (A div INT_1W_U_MAXINT_1);
@@ -9696,7 +9306,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    Multi_Int_ERROR      := True;
+    Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -9729,7 +9339,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    Multi_Int_ERROR      := True;
+    Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -9762,7 +9372,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    Multi_Int_ERROR      := True;
+    Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -10251,9 +9861,9 @@ begin
       bit := (Ord(A[c]) - Ord('0'));
       if (bit > 1) or (bit < 0) then
       begin
-        Multi_Int_ERROR  := True;
+        Multi_Int_ERROR := True;
         mi.FHasOverflow := True;
-        mi.FIsDefined  := False;
+        mi.FIsDefined   := False;
         if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
         begin
           raise EInterror.Create('Invalid binary digit');
@@ -10283,9 +9893,9 @@ begin
 
       if M_Val[n] > INT_1W_U_MAXINT then
       begin
-        mi.FIsDefined  := False;
+        mi.FIsDefined   := False;
         mi.FHasOverflow := True;
-        Multi_Int_ERROR  := True;
+        Multi_Int_ERROR := True;
         if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
         begin
           raise EIntOverflow.Create('Overflow');
@@ -10396,7 +10006,7 @@ end;
 (******************************************)
 function TMultiIntX4.ToBinaryString(const LZ: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_X4_to_bin(self, Result, LZ);
+  Multi_Int_X4_to_bin(Self, Result, LZ);
 end;
 
 
@@ -10442,9 +10052,9 @@ begin
       except
         on EConvertError do
         begin
-          Multi_Int_ERROR  := True;
+          Multi_Int_ERROR := True;
           mi.FHasOverflow := True;
-          mi.FIsDefined  := False;
+          mi.FIsDefined   := False;
           if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
           begin
             raise;
@@ -10478,9 +10088,9 @@ begin
 
       if M_Val[n] > INT_1W_U_MAXINT then
       begin
-        mi.FIsDefined  := False;
+        mi.FIsDefined   := False;
         mi.FHasOverflow := True;
-        Multi_Int_ERROR  := True;
+        Multi_Int_ERROR := True;
         if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
         begin
           raise EIntOverflow.Create('Overflow');
@@ -10591,7 +10201,7 @@ end;
 (******************************************)
 function TMultiIntX4.ToHexString(const LZ: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_X4_to_hex(self, Result, LZ);
+  Multi_Int_X4_to_hex(Self, Result, LZ);
 end;
 
 
@@ -10671,7 +10281,7 @@ end;
 (******************************************)
 function TMultiIntX4.ToString: ansistring;
 begin
-  Multi_Int_X4_to_String(self, Result);
+  Multi_Int_X4_to_String(Self, Result);
 end;
 
 
@@ -10716,7 +10326,7 @@ begin
   Result.FParts[5]    := (A.FParts[5] xor B.FParts[5]);
   Result.FParts[6]    := (A.FParts[6] xor B.FParts[6]);
   Result.FParts[7]    := (A.FParts[7] xor B.FParts[7]);
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolFalse;
@@ -10750,7 +10360,7 @@ begin
   Result.FParts[6] := (A.FParts[6] or B.FParts[6]);
   Result.FParts[7] := (A.FParts[7] or B.FParts[7]);
 
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolFalse;
@@ -10784,7 +10394,7 @@ begin
   Result.FParts[6] := (A.FParts[6] and B.FParts[6]);
   Result.FParts[7] := (A.FParts[7] and B.FParts[7]);
 
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolFalse;
@@ -10818,7 +10428,7 @@ begin
   Result.FParts[6] := (not A.FParts[6]);
   Result.FParts[7] := (not A.FParts[7]);
 
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolTrue;
@@ -10836,8 +10446,8 @@ var
   M_Val: array[0..Multi_X4_maxi] of INT_2W_U;
 begin
   Result.FHasOverflow := False;
-  Result.FIsDefined  := True;
-  Result.FIsNegative := uBoolUndefined;
+  Result.FIsDefined   := True;
+  Result.FIsNegative  := uBoolUndefined;
 
   tv1      := A.FParts[0];
   tv2      := B.FParts[0];
@@ -10965,8 +10575,8 @@ var
   M_Val: array[0..Multi_X4_maxi] of INT_2W_S;
 begin
   Result.FHasOverflow := False;
-  Result.FIsDefined  := True;
-  Result.FIsNegative := uBoolUndefined;
+  Result.FIsDefined   := True;
+  Result.FIsNegative  := uBoolUndefined;
 
   M_Val[0] := (A.FParts[0] - B.FParts[0]);
   if M_Val[0] < 0 then
@@ -11048,7 +10658,7 @@ begin
   M_Val[7] := (A.FParts[7] - B.FParts[7] + M_Val[7]);
   if M_Val[7] < 0 then
   begin
-    Result.FIsDefined  := False;
+    Result.FIsDefined   := False;
     Result.FHasOverflow := True;
   end;
 
@@ -11812,7 +11422,7 @@ begin
       goto 9000;
     end;
 
-    shiftup_bits_dividor := nlz_bits(dividor.M_Value[dividor_non_zero_pos]);
+    shiftup_bits_dividor := LeadingZeroCount(dividor.M_Value[dividor_non_zero_pos]);
     if (shiftup_bits_dividor > 0) then
     begin
       ShiftUp_NBits_Multi_Int_X5(dividend, shiftup_bits_dividor);
@@ -12395,7 +12005,7 @@ end;
 (******************************************)
 function Multi_Int_X5.Negative: boolean; inline;
 begin
-  Result := self.Negative_flag;
+  Result := Self.Negative_flag;
 end;
 
 
@@ -12812,8 +12422,8 @@ var
   n: INT_1W_U;
 begin
   Result.FHasOverflow := A.Overflow_flag;
-  Result.FIsDefined  := A.Defined_flag;
-  Result.FIsNegative := A.Negative_flag;
+  Result.FIsDefined   := A.Defined_flag;
+  Result.FIsNegative  := A.Negative_flag;
 
   if (A.Defined_flag = False) then
   begin
@@ -12828,7 +12438,7 @@ begin
   if (A.Overflow_flag = True) or (A > Multi_Int_X4_MAXINT) then
   begin
     Result.FHasOverflow := True;
-    Multi_Int_ERROR      := True;
+    Multi_Int_ERROR     := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Overflow');
@@ -13441,7 +13051,7 @@ TMultiIntXV
 (******************************************)
 procedure TMultiIntXV.Initialize;
 begin
-  self.FIsDefined := False;
+  Self.FIsDefined := False;
   if (not Multi_Init_Initialisation_done) then
   begin
     Multi_Int_ERROR := True;
@@ -13452,11 +13062,11 @@ begin
     exit;
   end;
 
-  setlength(self.FParts, Multi_XV_size);
-  self.FPartsSize  := Multi_XV_size;
-  self.FIsNegative := uBoolFalse;
-  self.FHasOverflow := False;
-  self.FIsDefined  := False;
+  setlength(Self.FParts, Multi_XV_size);
+  Self.FPartsSize   := Multi_XV_size;
+  Self.FIsNegative  := uBoolFalse;
+  Self.FHasOverflow := False;
+  Self.FIsDefined   := False;
 end;
 
 
@@ -13466,7 +13076,7 @@ begin
   if (S < 2) then
   begin
     Multi_Int_ERROR := True;
-    A.FHasOverflow := True;
+    A.FHasOverflow  := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Multi_Int_XV Size must be > 1');
@@ -13476,7 +13086,7 @@ begin
   if (S > (Multi_XV_limit)) then
   begin
     Multi_Int_ERROR := True;
-    A.FHasOverflow := True;
+    A.FHasOverflow  := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Overflow');
@@ -13518,7 +13128,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     Multi_Int_ERROR := True;
-    MI.FIsDefined := False;
+    MI.FIsDefined   := False;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -13528,7 +13138,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    Multi_Int_ERROR  := True;
+    Multi_Int_ERROR := True;
     MI.FHasOverflow := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
@@ -13543,7 +13153,7 @@ begin
     if (mi.HasOverflow) then
     begin
       Multi_Int_ERROR := True;
-      mi.FIsDefined := False;
+      mi.FIsDefined   := False;
       if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
       begin
         raise EInterror.Create('Overflow');
@@ -13553,8 +13163,8 @@ begin
   end;
 
   MI.FHasOverflow := A.FHasOverflow;
-  MI.FIsDefined  := A.FIsDefined;
-  MI.FIsNegative := A.FIsNegative;
+  MI.FIsDefined   := A.FIsDefined;
+  MI.FIsNegative  := A.FIsNegative;
 
   n := 0;
   while (n < A.FPartsSize) do
@@ -13733,7 +13343,7 @@ begin
   w := nlz_words_XV(A);
   if (w < A.FPartsSize) then
   begin
-    R      := nlz_bits(A.FParts[A.FPartsSize - w - 1]);
+    R      := LeadingZeroCount(A.FParts[A.FPartsSize - w - 1]);
     R      := R + (w * INT_1W_SIZE);
     Result := R;
   end
@@ -13747,14 +13357,14 @@ end;
 (******************************************)
 function TMultiIntXV.HasOverflow: boolean; inline;
 begin
-  Result := self.FHasOverflow;
+  Result := Self.FHasOverflow;
 end;
 
 
 (******************************************)
 function TMultiIntXV.IsDefined: boolean; inline;
 begin
-  Result := self.FIsDefined;
+  Result := Self.FIsDefined;
 end;
 
 
@@ -13775,7 +13385,7 @@ end;
 (******************************************)
 function TMultiIntXV.IsNegative: boolean; inline;
 begin
-  Result := self.FIsNegative;
+  Result := Self.FIsNegative;
 end;
 
 
@@ -14051,7 +13661,7 @@ begin
       while (n > 0) do
       begin
         carry_bits_2 := ((A.FParts[n] and carry_bits_mask) << NBits_carry);
-        A.FParts[n] := ((A.FParts[n] >> NBits) or carry_bits_1);
+        A.FParts[n]  := ((A.FParts[n] >> NBits) or carry_bits_1);
         carry_bits_1 := carry_bits_2;
         Dec(n);
       end;
@@ -14432,9 +14042,9 @@ begin
       except
         on EConvertError do
         begin
-          mi.FIsDefined  := False;
+          mi.FIsDefined   := False;
           mi.FHasOverflow := True;
-          Multi_Int_ERROR  := True;
+          Multi_Int_ERROR := True;
           if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
           begin
             raise;
@@ -14482,7 +14092,7 @@ begin
     Multi_Int_Reset_XV_Size(MI, s);
     if (mi.HasOverflow) then
     begin
-      mi.FIsDefined := False;
+      mi.FIsDefined   := False;
       Multi_Int_ERROR := True;
       if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
       begin
@@ -14605,7 +14215,7 @@ end;
 (******************************************)
 function TMultiIntXV.ToString: ansistring;
 begin
-  Multi_Int_XV_to_String(self, Result);
+  Multi_Int_XV_to_String(Self, Result);
 end;
 
 
@@ -14659,9 +14269,9 @@ begin
       try
         i := Hex2Dec(A[c]);
       except
-        Multi_Int_ERROR  := True;
+        Multi_Int_ERROR := True;
         mi.FHasOverflow := True;
-        mi.FIsDefined  := False;
+        mi.FIsDefined   := False;
         if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
         begin
           raise;
@@ -14709,7 +14319,7 @@ begin
     Multi_Int_Reset_XV_Size(MI, s);
     if (mi.HasOverflow) then
     begin
-      mi.FIsDefined := False;
+      mi.FIsDefined   := False;
       Multi_Int_ERROR := True;
       if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
       begin
@@ -14826,7 +14436,7 @@ end;
 (******************************************)
 function TMultiIntXV.ToHexString(const LZ: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_XV_to_hex(self, Result, LZ);
+  Multi_Int_XV_to_hex(Self, Result, LZ);
 end;
 
 
@@ -14874,9 +14484,9 @@ begin
       bit := (Ord(A[c]) - Ord('0'));
       if (bit > 1) or (bit < 0) then
       begin
-        Multi_Int_ERROR  := True;
+        Multi_Int_ERROR := True;
         mi.FHasOverflow := True;
-        mi.FIsDefined  := False;
+        mi.FIsDefined   := False;
         if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
         begin
           raise EInterror.Create('Invalid binary digit');
@@ -14921,7 +14531,7 @@ begin
     Multi_Int_Reset_XV_Size(MI, s);
     if (mi.HasOverflow) then
     begin
-      mi.FIsDefined := False;
+      mi.FIsDefined   := False;
       Multi_Int_ERROR := True;
       if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
       begin
@@ -15035,7 +14645,7 @@ end;
 (******************************************)
 function TMultiIntXV.ToBinaryString(const LZ: TMultiLeadingZeros): ansistring;
 begin
-  Multi_Int_XV_to_bin(self, Result, LZ);
+  Multi_Int_XV_to_bin(Self, Result, LZ);
 end;
 
 
@@ -15046,7 +14656,7 @@ var
 begin
   mi.Initialize;
   mi.FHasOverflow := False;
-  mi.FIsDefined  := True;
+  mi.FIsDefined   := True;
 
   n := 2;
   while (n <= Multi_XV_maxi) do
@@ -15058,14 +14668,14 @@ begin
   if (A < 0) then
   begin
     mi.FIsNegative := uBoolTrue;
-    mi.FParts[0]    := (ABS(A) mod INT_1W_U_MAXINT_1);
-    mi.FParts[1]    := (ABS(A) div INT_1W_U_MAXINT_1);
+    mi.FParts[0]   := (ABS(A) mod INT_1W_U_MAXINT_1);
+    mi.FParts[1]   := (ABS(A) div INT_1W_U_MAXINT_1);
   end
   else
   begin
     mi.FIsNegative := uBoolFalse;
-    mi.FParts[0]    := (A mod INT_1W_U_MAXINT_1);
-    mi.FParts[1]    := (A div INT_1W_U_MAXINT_1);
+    mi.FParts[0]   := (A mod INT_1W_U_MAXINT_1);
+    mi.FParts[1]   := (A div INT_1W_U_MAXINT_1);
   end;
 end;
 
@@ -15084,8 +14694,8 @@ var
 begin
   mi.Initialize;
   mi.FHasOverflow := False;
-  mi.FIsDefined  := True;
-  mi.FIsNegative := uBoolFalse;
+  mi.FIsDefined   := True;
+  mi.FIsNegative  := uBoolFalse;
 
   mi.FParts[0] := (A mod INT_1W_U_MAXINT_1);
   mi.FParts[1] := (A div INT_1W_U_MAXINT_1);
@@ -15234,7 +14844,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     Multi_Int_ERROR := True;
-    MI.FIsDefined := False;
+    MI.FIsDefined   := False;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -15248,8 +14858,8 @@ begin
   end;
 
   MI.FHasOverflow := A.FHasOverflow;
-  MI.FIsDefined  := A.FIsDefined;
-  MI.FIsNegative := A.FIsNegative;
+  MI.FIsDefined   := A.FIsDefined;
+  MI.FIsNegative  := A.FIsNegative;
 
   n := 0;
   if (MI.FPartsSize < Multi_X4_size) then
@@ -15277,7 +14887,7 @@ begin
   OVERFLOW_BRANCH:
 
     Multi_Int_ERROR := True;
-  MI.FHasOverflow  := True;
+  MI.FHasOverflow   := True;
   if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
   begin
     raise EInterror.Create('Overflow');
@@ -15316,7 +14926,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     Multi_Int_ERROR := True;
-    MI.FIsDefined := False;
+    MI.FIsDefined   := False;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -15330,8 +14940,8 @@ begin
   end;
 
   MI.FHasOverflow := A.FHasOverflow;
-  MI.FIsDefined  := A.FIsDefined;
-  MI.FIsNegative := A.FIsNegative;
+  MI.FIsDefined   := A.FIsDefined;
+  MI.FIsNegative  := A.FIsNegative;
 
   n := 0;
   if (MI.FPartsSize < Multi_X3_size) then
@@ -15359,7 +14969,7 @@ begin
   OVERFLOW_BRANCH:
 
     Multi_Int_ERROR := True;
-  MI.FHasOverflow  := True;
+  MI.FHasOverflow   := True;
   if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
   begin
     raise EInterror.Create('Overflow');
@@ -15398,7 +15008,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     Multi_Int_ERROR := True;
-    MI.FIsDefined := False;
+    MI.FIsDefined   := False;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -15412,8 +15022,8 @@ begin
   end;
 
   MI.FHasOverflow := A.FHasOverflow;
-  MI.FIsDefined  := A.FIsDefined;
-  MI.FIsNegative := A.FIsNegative;
+  MI.FIsDefined   := A.FIsDefined;
+  MI.FIsNegative  := A.FIsNegative;
 
   n := 0;
   if (MI.FPartsSize < Multi_X2_size) then
@@ -15441,7 +15051,7 @@ begin
   OVERFLOW_BRANCH:
 
     Multi_Int_ERROR := True;
-  MI.FHasOverflow  := True;
+  MI.FHasOverflow   := True;
   if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
   begin
     raise EInterror.Create('Overflow');
@@ -15727,7 +15337,7 @@ begin
   begin
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
-    Multi_Int_ERROR      := True;
+    Multi_Int_ERROR    := True;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
     begin
       raise EIntOverflow.Create('Overflow');
@@ -15758,7 +15368,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    Multi_Int_ERROR      := True;
+    Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -15791,7 +15401,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    Multi_Int_ERROR      := True;
+    Multi_Int_ERROR    := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if Multi_Int_RAISE_EXCEPTIONS_ENABLED then
@@ -16230,15 +15840,15 @@ begin
     Multi_Int_Reset_XV_Size(Result, ss);
     if (Result.HasOverflow) then
     begin
-      Multi_Int_ERROR     := True;
+      Multi_Int_ERROR   := True;
       Result.FIsDefined := False;
       goto 999;
     end;
   end;
 
   Result.FHasOverflow := False;
-  Result.FIsDefined  := True;
-  Result.FIsNegative := uBoolUndefined;
+  Result.FIsDefined   := True;
+  Result.FIsNegative  := uBoolUndefined;
 
   M_Val_All_Zero := True;
   i := 0;
@@ -16358,15 +15968,15 @@ begin
     Multi_Int_Reset_XV_Size(Result, ss);
     if (Result.HasOverflow) then
     begin
-      Multi_Int_ERROR     := True;
+      Multi_Int_ERROR   := True;
       Result.FIsDefined := False;
       goto 999;
     end;
   end;
 
   Result.FHasOverflow := False;
-  Result.FIsDefined  := True;
-  Result.FIsNegative := uBoolUndefined;
+  Result.FIsDefined   := True;
+  Result.FIsNegative  := uBoolUndefined;
 
   M_Val_All_Zero := True;
   i := 0;
@@ -16777,7 +16387,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      Multi_Int_ERROR     := True;
+      Multi_Int_ERROR   := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16806,7 +16416,7 @@ begin
     Inc(i);
   end;
 
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolFalse;
@@ -16864,7 +16474,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      Multi_Int_ERROR     := True;
+      Multi_Int_ERROR   := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16893,7 +16503,7 @@ begin
     Inc(i);
   end;
 
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolFalse;
@@ -16951,7 +16561,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      Multi_Int_ERROR     := True;
+      Multi_Int_ERROR   := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16980,7 +16590,7 @@ begin
     Inc(i);
   end;
 
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolFalse;
@@ -17033,7 +16643,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      Multi_Int_ERROR     := True;
+      Multi_Int_ERROR   := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -17054,7 +16664,7 @@ begin
     Inc(i);
   end;
 
-  Result.FIsDefined  := True;
+  Result.FIsDefined   := True;
   Result.FHasOverflow := False;
 
   Result.FIsNegative := uBoolTrue;
@@ -17085,8 +16695,8 @@ begin
 
   Result.Initialize;
   Result.FHasOverflow := False;
-  Result.FIsDefined  := True;
-  Result.FIsNegative := uBoolUndefined;
+  Result.FIsDefined   := True;
+  Result.FIsNegative  := uBoolUndefined;
 
   // skip leading zeros in B
   zf := False;
@@ -17185,7 +16795,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, (z1 + 1));
     if (Result.HasOverflow) then
     begin
-      Multi_Int_ERROR     := True;
+      Multi_Int_ERROR   := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -17504,7 +17114,7 @@ begin
       goto 9000;
     end;
 
-    shiftup_bits_dividor := nlz_bits(dividor.FParts[dividor_non_zero_pos]);
+    shiftup_bits_dividor := LeadingZeroCount(dividor.FParts[dividor_non_zero_pos]);
     if (shiftup_bits_dividor > 0) then
     begin
       ShiftUp_NBits_Multi_Int_XV(dividend, shiftup_bits_dividor);
