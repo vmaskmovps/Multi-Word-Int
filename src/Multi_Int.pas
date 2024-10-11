@@ -261,10 +261,10 @@ type
     FParts: array[0..Multi_X3_maxi] of INT_1W_U;
   public
     function ToString: ansistring; inline;
-    function ToHexString(const LeadingZeroMode: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
-      inline;
-    function ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
-      inline;
+    function ToHexString(const LeadingZeroMode: TMultiLeadingZeros =
+      TrimLeadingZeros): ansistring; inline;
+    function ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros =
+      TrimLeadingZeros): ansistring; inline;
     function FromHexString(const A: ansistring): TMultiIntX3; inline;
     function FromBinaryString(const A: ansistring): TMultiIntX3; inline;
     function HasOverflow: boolean; inline;
@@ -325,10 +325,10 @@ type
     FParts: array[0..Multi_X4_maxi] of INT_1W_U;
   public
     function ToString: ansistring; inline;
-    function ToHexString(const LeadingZeroMode: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
-      inline;
-    function ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
-      inline;
+    function ToHexString(const LeadingZeroMode: TMultiLeadingZeros =
+      TrimLeadingZeros): ansistring; inline;
+    function ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros =
+      TrimLeadingZeros): ansistring; inline;
     function FromHexString(const A: ansistring): TMultiIntX4; inline;
     function FromBinaryString(const A: ansistring): TMultiIntX4; inline;
     function HasOverflow: boolean; inline;
@@ -392,10 +392,10 @@ type
   public
     procedure Initialize; inline;
     function ToString: ansistring; inline;
-    function ToHexString(const LeadingZeroMode: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
-      inline;
-    function ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros = TrimLeadingZeros): ansistring;
-      inline;
+    function ToHexString(const LeadingZeroMode: TMultiLeadingZeros =
+      TrimLeadingZeros): ansistring; inline;
+    function ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros =
+      TrimLeadingZeros): ansistring; inline;
     function FromHexString(const A: ansistring): TMultiIntXV; inline;
     function FromBinaryString(const A: ansistring): TMultiIntXV; inline;
     function HasOverflow: boolean; inline;
@@ -451,7 +451,7 @@ type
 
 var
   MultiIntEnableExceptions: boolean = True;
-  MultiIntError:     boolean = False;
+  MultiIntError: boolean = False;
   Multi_Int_X2_MAXINT: TMultiIntX2;
   Multi_Int_X3_MAXINT: TMultiIntX3;
   Multi_Int_X4_MAXINT: TMultiIntX4;
@@ -1348,7 +1348,7 @@ begin
   m.FHasOverflow := False;
   m.FIsDefined := True;
   m.FIsNegative := False;
-  IsNegative  := False;
+  IsNegative := False;
   IsZero := False;
 
   Parts[0] := 0;
@@ -1361,72 +1361,72 @@ begin
     Exit;
   end;
 
-    startIndex := low(ansistring);
-    endIndex := startIndex + INT_2W_U(length(A)) - 1;
+  startIndex := low(ansistring);
+  endIndex   := startIndex + INT_2W_U(length(A)) - 1;
 
-    if A[startIndex] = '-' then
-    begin
-      IsNegative := True;
-      Inc(startIndex);
-    end;
+  if A[startIndex] = '-' then
+  begin
+    IsNegative := True;
+    Inc(startIndex);
+  end;
 
-    currentIndex := startIndex;
-    while currentIndex <= endIndex do
-    begin
-      try
-        i := StrToInt(A[currentIndex]);
-      except
-        on EConvertError do
-        begin
-          MultiIntError := True;
-          m.FHasOverflow := True;
-          m.FIsDefined   := False;
-          if MultiIntEnableExceptions then
-          begin
-            raise;
-          end;
-          Exit;
-        end;
-      end;
-
-      Parts[0] := (Parts[0] * 10) + i;
-      Parts[1] := (Parts[1] * 10);
-      Parts[2] := (Parts[2] * 10);
-      Parts[3] := (Parts[3] * 10);
-
-      if Parts[0] > INT_1W_U_MAXINT then
+  currentIndex := startIndex;
+  while currentIndex <= endIndex do
+  begin
+    try
+      i := StrToInt(A[currentIndex]);
+    except
+      on EConvertError do
       begin
-        Parts[1] := Parts[1] + (Parts[0] div INT_1W_U_MAXINT_1);
-        Parts[0] := (Parts[0] mod INT_1W_U_MAXINT_1);
-      end;
-
-      if Parts[1] > INT_1W_U_MAXINT then
-      begin
-        Parts[2] := Parts[2] + (Parts[1] div INT_1W_U_MAXINT_1);
-        Parts[1] := (Parts[1] mod INT_1W_U_MAXINT_1);
-      end;
-
-      if Parts[2] > INT_1W_U_MAXINT then
-      begin
-        Parts[3] := Parts[3] + (Parts[2] div INT_1W_U_MAXINT_1);
-        Parts[2] := (Parts[2] mod INT_1W_U_MAXINT_1);
-      end;
-
-      if Parts[3] > INT_1W_U_MAXINT then
-      begin
-        MultiIntError := True;
-        m.FIsDefined   := False;
+        MultiIntError  := True;
         m.FHasOverflow := True;
+        m.FIsDefined   := False;
         if MultiIntEnableExceptions then
         begin
-          raise EIntOverflow.Create('Overflow');
+          raise;
         end;
-
         Exit;
       end;
-
-      Inc(currentIndex);
     end;
+
+    Parts[0] := (Parts[0] * 10) + i;
+    Parts[1] := (Parts[1] * 10);
+    Parts[2] := (Parts[2] * 10);
+    Parts[3] := (Parts[3] * 10);
+
+    if Parts[0] > INT_1W_U_MAXINT then
+    begin
+      Parts[1] := Parts[1] + (Parts[0] div INT_1W_U_MAXINT_1);
+      Parts[0] := (Parts[0] mod INT_1W_U_MAXINT_1);
+    end;
+
+    if Parts[1] > INT_1W_U_MAXINT then
+    begin
+      Parts[2] := Parts[2] + (Parts[1] div INT_1W_U_MAXINT_1);
+      Parts[1] := (Parts[1] mod INT_1W_U_MAXINT_1);
+    end;
+
+    if Parts[2] > INT_1W_U_MAXINT then
+    begin
+      Parts[3] := Parts[3] + (Parts[2] div INT_1W_U_MAXINT_1);
+      Parts[2] := (Parts[2] mod INT_1W_U_MAXINT_1);
+    end;
+
+    if Parts[3] > INT_1W_U_MAXINT then
+    begin
+      MultiIntError  := True;
+      m.FIsDefined   := False;
+      m.FHasOverflow := True;
+      if MultiIntEnableExceptions then
+      begin
+        raise EIntOverflow.Create('Overflow');
+      end;
+
+      Exit;
+    end;
+
+    Inc(currentIndex);
+  end;
 
   m.FParts[0] := Parts[0];
   m.FParts[1] := Parts[1];
@@ -1442,16 +1442,19 @@ begin
 end;
 
 
-procedure Handle_Uninitialised_Overflow(var Result: TMultiIntX2; const IsDefined, HasOverflow: Boolean);
+procedure Handle_Uninitialised_Overflow(var Result: TMultiIntX2;
+  const IsDefined, HasOverflow: boolean);
 begin
-  Result.FIsDefined := IsDefined;
+  Result.FIsDefined   := IsDefined;
   Result.FHasOverflow := HasOverflow;
 
   if not IsDefined then
   begin
     MultiIntError := True;
     if MultiIntEnableExceptions then
+    begin
       raise EInterror.Create('Uninitialised variable');
+    end;
     Exit;
   end;
 
@@ -1460,7 +1463,9 @@ begin
     MultiIntError := True;
     Result.FHasOverflow := True;
     if MultiIntEnableExceptions then
+    begin
       raise EInterror.Create('Overflow');
+    end;
     Exit;
   end;
 end;
@@ -1476,7 +1481,9 @@ begin
   if A.FIsDefined then
   begin
     for n := 0 to Multi_X2_maxi do
+    begin
       Result.FParts[n] := A.FParts[n];
+    end;
   end;
 end;
 
@@ -1491,7 +1498,9 @@ begin
   if A.FIsDefined then
   begin
     for n := 0 to Multi_X2_maxi do
+    begin
       Result.FParts[n] := A.FParts[n];
+    end;
   end;
 end;
 
@@ -1508,7 +1517,9 @@ begin
     if Multi_XV_size > Multi_X2_size then
     begin
       for n := 0 to Multi_X2_maxi do
+      begin
         Result.FParts[n] := A.FParts[n];
+      end;
 
       for n := Multi_X2_maxi + 1 to Multi_XV_maxi do
       begin
@@ -1517,7 +1528,9 @@ begin
           MultiIntError := True;
           Result.FHasOverflow := True;
           if MultiIntEnableExceptions then
+          begin
             raise EInterror.Create('Overflow');
+          end;
           Exit;
         end;
       end;
@@ -1525,10 +1538,14 @@ begin
     else
     begin
       for n := 0 to Multi_XV_maxi do
+      begin
         Result.FParts[n] := A.FParts[n];
+      end;
 
       for n := Multi_XV_maxi + 1 to Multi_X2_maxi do
+      begin
         Result.FParts[n] := 0;
+      end;
     end;
   end;
 
@@ -1611,13 +1628,13 @@ begin
 
   if m.FIsNegative then
   begin
-    m.FParts[0]   := (Abs(A) mod INT_1W_U_MAXINT_1);
-    m.FParts[1]   := (Abs(A) div INT_1W_U_MAXINT_1);
+    m.FParts[0] := (Abs(A) mod INT_1W_U_MAXINT_1);
+    m.FParts[1] := (Abs(A) div INT_1W_U_MAXINT_1);
   end
   else
   begin
-    m.FParts[0]   := (A mod INT_1W_U_MAXINT_1);
-    m.FParts[1]   := (A div INT_1W_U_MAXINT_1);
+    m.FParts[0] := (A mod INT_1W_U_MAXINT_1);
+    m.FParts[1] := (A div INT_1W_U_MAXINT_1);
   end;
 end;
 
@@ -1667,7 +1684,7 @@ begin
 
   if Temp.HasOverflow then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -1699,7 +1716,7 @@ begin
 
   if Temp.HasOverflow then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -1731,7 +1748,7 @@ begin
 
   if Temp.HasOverflow then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -1780,7 +1797,7 @@ begin
       TempValue := A.FParts[i];
       try
         begin
-          TempValue := TempValue * Multiplier;
+          TempValue   := TempValue * Multiplier;
           ResultValue := ResultValue + TempValue;
         end
       except
@@ -1852,7 +1869,7 @@ begin
       TempValue := A.FParts[i];
       try
         begin
-          TempValue := (TempValue * Multiplier);
+          TempValue   := (TempValue * Multiplier);
           ResultValue := ResultValue + TempValue;
         end
       except
@@ -1923,15 +1940,17 @@ begin
   begin
     PartValue := A.FParts[i];
     try
-      PartValue := PartValue * Multiplier;
+      PartValue   := PartValue * Multiplier;
       ResultValue := ResultValue + PartValue;
-      Multiplier := Multiplier * INT_1W_U_MAXINT_1;
+      Multiplier  := Multiplier * INT_1W_U_MAXINT_1;
     except
       on E: EIntOverflow do
       begin
         MultiIntError := True;
         if MultiIntEnableExceptions then
+        begin
           raise EIntOverflow.Create('Overflow');
+        end;
         Exit;
       end;
     end;
@@ -2167,68 +2186,74 @@ begin
   m.FHasOverflow := False;
   m.FIsDefined := True;
   m.FIsNegative := False;
-  HasSign  := False;
-  IsZero := False;
+  HasSign := False;
+  IsZero  := False;
 
   n := 0;
   for n := 0 to Multi_X2_maxi do
+  begin
     Value[n] := 0;
+  end;
 
   if Length(A) = 0 then
+  begin
     Exit;
+  end;
 
-    startIndex := low(ansistring);
-    endIndex := startIndex + INT_2W_U(length(A)) - 1;
-    if (A[startIndex] = '-') then
+  startIndex := low(ansistring);
+  endIndex   := startIndex + INT_2W_U(length(A)) - 1;
+  if (A[startIndex] = '-') then
+  begin
+    HasSign := True;
+    Inc(startIndex);
+  end;
+
+  for i := startIndex to endIndex do
+  begin
+    bit := (Ord(A[i]) - Ord('0'));
+
+    if (bit < 0) or (bit > 1) then
     begin
-      HasSign := True;
-      Inc(startIndex);
+      MultiIntError  := True;
+      m.FHasOverflow := True;
+      m.FIsDefined   := False;
+
+      if MultiIntEnableExceptions then
+      begin
+        raise EInterror.Create('Invalid binary digit');
+      end;
+      Exit;
     end;
 
-    for i := startIndex to endIndex do
+    Value[0] := (Value[0] * 2) + bit;
+    for n := 1 to Multi_X2_maxi do
     begin
-      bit := (Ord(A[i]) - Ord('0'));
+      Value[n] := (Value[n] * 2);
+    end;
 
-      if (bit < 0) or (bit > 1) then
-      begin
-        MultiIntError := True;
-        m.FHasOverflow := True;
-        m.FIsDefined   := False;
-
-        if MultiIntEnableExceptions then
-        begin
-          raise EInterror.Create('Invalid binary digit');
-        end;
-        Exit;
-      end;
-
-      Value[0] := (Value[0] * 2) + bit;
-      for n := 1 to Multi_X2_maxi do
-          Value[n] := (Value[n] * 2);
-
-      for n := 0 to Multi_X2_maxi - 1 do
-      begin
-        if Value[n] > INT_1W_U_MAXINT then
-        begin
-          Value[n + 1] := Value[n + 1] + (Value[n] div INT_1W_U_MAXINT_1);
-          Value[n]     := (Value[n] mod INT_1W_U_MAXINT_1);
-        end;
-      end;
-
+    for n := 0 to Multi_X2_maxi - 1 do
+    begin
       if Value[n] > INT_1W_U_MAXINT then
       begin
-        m.FIsDefined   := False;
-        m.FHasOverflow := True;
-        MultiIntError := True;
-
-        if MultiIntEnableExceptions then
-        begin
-          raise EIntOverflow.Create('Overflow');
-        end;
-
-        Exit;
+        Value[n + 1] := Value[n + 1] + (Value[n] div INT_1W_U_MAXINT_1);
+        Value[n]     := (Value[n] mod INT_1W_U_MAXINT_1);
       end;
     end;
+
+    if Value[n] > INT_1W_U_MAXINT then
+    begin
+      m.FIsDefined   := False;
+      m.FHasOverflow := True;
+      MultiIntError  := True;
+
+      if MultiIntEnableExceptions then
+      begin
+        raise EIntOverflow.Create('Overflow');
+      end;
+
+      Exit;
+    end;
+  end;
 
   AllZero := True;
   for n := 0 to Multi_X2_maxi do
@@ -2303,7 +2328,7 @@ begin
   s := '';
 
   s := IntToBin(A.FParts[3], n) + IntToBin(A.FParts[2], n) +
-       IntToBin(A.FParts[1], n) + IntToBin(A.FParts[0], n);
+    IntToBin(A.FParts[1], n) + IntToBin(A.FParts[0], n);
 
   if LeadingZeroMode = TrimLeadingZeros then
   begin
@@ -2325,8 +2350,8 @@ end;
 
 
 (******************************************)
-function TMultiIntX2.ToBinaryString(
-  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
+function TMultiIntX2.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros):
+ansistring;
 begin
   Multi_Int_X2_to_bin(Self, Result, LeadingZeroMode);
 end;
@@ -2430,7 +2455,7 @@ begin
       except
         on EConvertError do
         begin
-          MultiIntError := True;
+          MultiIntError   := True;
           mi.FIsDefined   := False;
           mi.FHasOverflow := True;
           if MultiIntEnableExceptions then
@@ -2466,7 +2491,7 @@ begin
 
       if M_Val[n] > INT_1W_U_MAXINT then
       begin
-        MultiIntError := True;
+        MultiIntError   := True;
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
         if MultiIntEnableExceptions then
@@ -4804,7 +4829,7 @@ begin
       except
         on EConvertError do
         begin
-          MultiIntError := True;
+          MultiIntError   := True;
           mi.FIsDefined   := False;
           mi.FHasOverflow := True;
           if MultiIntEnableExceptions then
@@ -4856,7 +4881,7 @@ begin
 
       if M_Val[5] > INT_1W_U_MAXINT then
       begin
-        MultiIntError := True;
+        MultiIntError   := True;
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
         if MultiIntEnableExceptions then
@@ -5044,7 +5069,7 @@ var
 begin
   if (A.FIsDefined = False) then
   begin
-    MultiIntError   := True;
+    MultiIntError     := True;
     Result.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
@@ -5097,7 +5122,7 @@ begin
 
   OVERFLOW_BRANCH:
 
-    MultiIntError   := True;
+    MultiIntError     := True;
   Result.FHasOverflow := True;
   if MultiIntEnableExceptions then
   begin
@@ -5171,7 +5196,7 @@ begin
 
   if (A.FHasOverflow = True) or (A > Multi_Int_X3_MAXINT) then
   begin
-    MultiIntError     := True;
+    MultiIntError := True;
     Result.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
@@ -5210,7 +5235,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    MultiIntError     := True;
+    MultiIntError := True;
     Result.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
@@ -5247,7 +5272,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     MultiIntError := True;
-    MI.FIsDefined   := False;
+    MI.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -5257,7 +5282,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    MultiIntError := True;
+    MultiIntError   := True;
     MI.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
@@ -5303,7 +5328,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -5336,7 +5361,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -5369,7 +5394,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -5853,7 +5878,7 @@ begin
       bit := (Ord(A[c]) - Ord('0'));
       if (bit > 1) or (bit < 0) then
       begin
-        MultiIntError := True;
+        MultiIntError   := True;
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
         if MultiIntEnableExceptions then
@@ -5887,7 +5912,7 @@ begin
       begin
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
-        MultiIntError := True;
+        MultiIntError   := True;
         if MultiIntEnableExceptions then
         begin
           raise EIntOverflow.Create('Overflow');
@@ -5995,7 +6020,8 @@ end;
 
 
 (******************************************)
-function TMultiIntX3.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros): ansistring;
+function TMultiIntX3.ToBinaryString(
+  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
 begin
   Multi_Int_X3_to_bin(Self, Result, LeadingZeroMode);
 end;
@@ -6100,7 +6126,7 @@ begin
       except
         on EConvertError do
         begin
-          MultiIntError := True;
+          MultiIntError   := True;
           mi.FIsDefined   := False;
           mi.FHasOverflow := True;
           if MultiIntEnableExceptions then
@@ -6136,7 +6162,7 @@ begin
 
       if M_Val[n] > INT_1W_U_MAXINT then
       begin
-        MultiIntError := True;
+        MultiIntError   := True;
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
         if MultiIntEnableExceptions then
@@ -8663,7 +8689,7 @@ var
 begin
   if (A.FIsDefined = False) then
   begin
-    MultiIntError   := True;
+    MultiIntError     := True;
     Result.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
@@ -8716,7 +8742,7 @@ begin
 
   OVERFLOW_BRANCH:
 
-    MultiIntError   := True;
+    MultiIntError     := True;
   Result.FHasOverflow := True;
   if MultiIntEnableExceptions then
   begin
@@ -8869,7 +8895,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     MultiIntError := True;
-    MI.FIsDefined   := False;
+    MI.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -8879,7 +8905,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    MultiIntError := True;
+    MultiIntError   := True;
     MI.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
@@ -8923,7 +8949,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     MultiIntError := True;
-    MI.FIsDefined   := False;
+    MI.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -8933,7 +8959,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    MultiIntError := True;
+    MultiIntError   := True;
     MI.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
@@ -9010,7 +9036,7 @@ begin
         begin
           mi.FIsDefined   := False;
           mi.FHasOverflow := True;
-          MultiIntError := True;
+          MultiIntError   := True;
           if MultiIntEnableExceptions then
           begin
             raise;
@@ -9076,7 +9102,7 @@ begin
       begin
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
-        MultiIntError := True;
+        MultiIntError   := True;
         if MultiIntEnableExceptions then
         begin
           raise EIntOverflow.Create('Overflow');
@@ -9277,7 +9303,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -9310,7 +9336,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -9343,7 +9369,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -9832,7 +9858,7 @@ begin
       bit := (Ord(A[c]) - Ord('0'));
       if (bit > 1) or (bit < 0) then
       begin
-        MultiIntError := True;
+        MultiIntError   := True;
         mi.FHasOverflow := True;
         mi.FIsDefined   := False;
         if MultiIntEnableExceptions then
@@ -9866,7 +9892,7 @@ begin
       begin
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
-        MultiIntError := True;
+        MultiIntError   := True;
         if MultiIntEnableExceptions then
         begin
           raise EIntOverflow.Create('Overflow');
@@ -9975,7 +10001,8 @@ end;
 
 
 (******************************************)
-function TMultiIntX4.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros): ansistring;
+function TMultiIntX4.ToBinaryString(
+  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
 begin
   Multi_Int_X4_to_bin(Self, Result, LeadingZeroMode);
 end;
@@ -10023,7 +10050,7 @@ begin
       except
         on EConvertError do
         begin
-          MultiIntError := True;
+          MultiIntError   := True;
           mi.FHasOverflow := True;
           mi.FIsDefined   := False;
           if MultiIntEnableExceptions then
@@ -10061,7 +10088,7 @@ begin
       begin
         mi.FIsDefined   := False;
         mi.FHasOverflow := True;
-        MultiIntError := True;
+        MultiIntError   := True;
         if MultiIntEnableExceptions then
         begin
           raise EIntOverflow.Create('Overflow');
@@ -12338,7 +12365,7 @@ begin
 
   if (A.FIsDefined = False) then
   begin
-    MultiIntError := True;
+    MultiIntError   := True;
     MI.Defined_flag := False;
     if MultiIntEnableExceptions then
     begin
@@ -12349,7 +12376,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    MultiIntError  := True;
+    MultiIntError    := True;
     MI.Overflow_flag := True;
     if MultiIntEnableExceptions then
     begin
@@ -12409,7 +12436,7 @@ begin
   if (A.Overflow_flag = True) or (A > Multi_Int_X4_MAXINT) then
   begin
     Result.FHasOverflow := True;
-    MultiIntError     := True;
+    MultiIntError := True;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Overflow');
@@ -13046,8 +13073,8 @@ procedure Multi_Int_Reset_XV_Size(var A: TMultiIntXV; const S: INT_2W_U);
 begin
   if (S < 2) then
   begin
-    MultiIntError := True;
-    A.FHasOverflow  := True;
+    MultiIntError  := True;
+    A.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Multi_Int_XV Size must be > 1');
@@ -13056,8 +13083,8 @@ begin
   end;
   if (S > (Multi_XV_limit)) then
   begin
-    MultiIntError := True;
-    A.FHasOverflow  := True;
+    MultiIntError  := True;
+    A.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Overflow');
@@ -13099,7 +13126,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     MultiIntError := True;
-    MI.FIsDefined   := False;
+    MI.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -13109,7 +13136,7 @@ begin
 
   if (A.FHasOverflow = True) then
   begin
-    MultiIntError := True;
+    MultiIntError   := True;
     MI.FHasOverflow := True;
     if MultiIntEnableExceptions then
     begin
@@ -13124,7 +13151,7 @@ begin
     if (mi.HasOverflow) then
     begin
       MultiIntError := True;
-      mi.FIsDefined   := False;
+      mi.FIsDefined := False;
       if MultiIntEnableExceptions then
       begin
         raise EInterror.Create('Overflow');
@@ -14015,7 +14042,7 @@ begin
         begin
           mi.FIsDefined   := False;
           mi.FHasOverflow := True;
-          MultiIntError := True;
+          MultiIntError   := True;
           if MultiIntEnableExceptions then
           begin
             raise;
@@ -14063,7 +14090,7 @@ begin
     Multi_Int_Reset_XV_Size(MI, s);
     if (mi.HasOverflow) then
     begin
-      mi.FIsDefined   := False;
+      mi.FIsDefined := False;
       MultiIntError := True;
       if MultiIntEnableExceptions then
       begin
@@ -14240,7 +14267,7 @@ begin
       try
         i := Hex2Dec(A[c]);
       except
-        MultiIntError := True;
+        MultiIntError   := True;
         mi.FHasOverflow := True;
         mi.FIsDefined   := False;
         if MultiIntEnableExceptions then
@@ -14290,7 +14317,7 @@ begin
     Multi_Int_Reset_XV_Size(MI, s);
     if (mi.HasOverflow) then
     begin
-      mi.FIsDefined   := False;
+      mi.FIsDefined := False;
       MultiIntError := True;
       if MultiIntEnableExceptions then
       begin
@@ -14455,7 +14482,7 @@ begin
       bit := (Ord(A[c]) - Ord('0'));
       if (bit > 1) or (bit < 0) then
       begin
-        MultiIntError := True;
+        MultiIntError   := True;
         mi.FHasOverflow := True;
         mi.FIsDefined   := False;
         if MultiIntEnableExceptions then
@@ -14502,7 +14529,7 @@ begin
     Multi_Int_Reset_XV_Size(MI, s);
     if (mi.HasOverflow) then
     begin
-      mi.FIsDefined   := False;
+      mi.FIsDefined := False;
       MultiIntError := True;
       if MultiIntEnableExceptions then
       begin
@@ -14614,7 +14641,8 @@ end;
 
 
 (******************************************)
-function TMultiIntXV.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros): ansistring;
+function TMultiIntXV.ToBinaryString(
+  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
 begin
   Multi_Int_XV_to_bin(Self, Result, LeadingZeroMode);
 end;
@@ -14815,7 +14843,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     MultiIntError := True;
-    MI.FIsDefined   := False;
+    MI.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -14858,7 +14886,7 @@ begin
   OVERFLOW_BRANCH:
 
     MultiIntError := True;
-  MI.FHasOverflow   := True;
+  MI.FHasOverflow := True;
   if MultiIntEnableExceptions then
   begin
     raise EInterror.Create('Overflow');
@@ -14897,7 +14925,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     MultiIntError := True;
-    MI.FIsDefined   := False;
+    MI.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -14940,7 +14968,7 @@ begin
   OVERFLOW_BRANCH:
 
     MultiIntError := True;
-  MI.FHasOverflow   := True;
+  MI.FHasOverflow := True;
   if MultiIntEnableExceptions then
   begin
     raise EInterror.Create('Overflow');
@@ -14979,7 +15007,7 @@ begin
   if (A.FIsDefined = False) then
   begin
     MultiIntError := True;
-    MI.FIsDefined   := False;
+    MI.FIsDefined := False;
     if MultiIntEnableExceptions then
     begin
       raise EInterror.Create('Uninitialised variable');
@@ -15022,7 +15050,7 @@ begin
   OVERFLOW_BRANCH:
 
     MultiIntError := True;
-  MI.FHasOverflow   := True;
+  MI.FHasOverflow := True;
   if MultiIntEnableExceptions then
   begin
     raise EInterror.Create('Overflow');
@@ -15308,7 +15336,7 @@ begin
   begin
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
-    MultiIntError    := True;
+    MultiIntError      := True;
     if MultiIntEnableExceptions then
     begin
       raise EIntOverflow.Create('Overflow');
@@ -15339,7 +15367,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -15372,7 +15400,7 @@ begin
 
   if (R.HasOverflow) then
   begin
-    MultiIntError    := True;
+    MultiIntError      := True;
     Result.FIsDefined  := False;
     Result.FIsNegative := uBoolUndefined;
     if MultiIntEnableExceptions then
@@ -15811,7 +15839,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, ss);
     if (Result.HasOverflow) then
     begin
-      MultiIntError   := True;
+      MultiIntError     := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -15939,7 +15967,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, ss);
     if (Result.HasOverflow) then
     begin
-      MultiIntError   := True;
+      MultiIntError     := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16358,7 +16386,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      MultiIntError   := True;
+      MultiIntError     := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16445,7 +16473,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      MultiIntError   := True;
+      MultiIntError     := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16532,7 +16560,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      MultiIntError   := True;
+      MultiIntError     := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16614,7 +16642,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, s);
     if (Result.HasOverflow) then
     begin
-      MultiIntError   := True;
+      MultiIntError     := True;
       Result.FIsDefined := False;
       goto 999;
     end;
@@ -16766,7 +16794,7 @@ begin
     Multi_Int_Reset_XV_Size(Result, (z1 + 1));
     if (Result.HasOverflow) then
     begin
-      MultiIntError   := True;
+      MultiIntError     := True;
       Result.FIsDefined := False;
       goto 999;
     end;
