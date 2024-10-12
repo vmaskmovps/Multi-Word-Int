@@ -42,7 +42,8 @@ interface
 
 uses
   SysUtils,
-  strutils;
+  strutils,
+  MultiInt.Bool;
 
 const
   version = '4.60.00';
@@ -156,33 +157,9 @@ type
 type
   TMultiLeadingZeros = (KeepLeadingZeros, TrimLeadingZeros);
   TMultiBitMode      = (UndefinedBitMode, BitMode32, BitMode64);
-  TMultiUBoolState   = (uBoolUndefined, uBoolFalse, uBoolTrue);
 
-  TMultiUBool = record
-  private
-    FValue: TMultiUBoolState;
-  public
-    class operator := (A: boolean): TMultiUBool; inline;
-    class operator := (A: TMultiUBool): boolean; inline;
-    class operator := (A: TMultiUBoolState): TMultiUBool; inline;
-    class operator := (A: TMultiUBool): TMultiUBoolState; inline;
-
-    class operator =(A, B: TMultiUBool): boolean; inline;
-    class operator <>(A, B: TMultiUBool): boolean; inline;
-
-    class operator or(A, B: TMultiUBool): boolean; inline;
-    class operator or(A: TMultiUBool; B: boolean): boolean; inline;
-    class operator or(A: boolean; B: TMultiUBool): boolean; inline;
-
-    class operator and(A, B: TMultiUBool): boolean; inline;
-    class operator and(A: TMultiUBool; B: boolean): boolean; inline;
-    class operator and(A: boolean; B: TMultiUBool): boolean; inline;
-
-    class operator not(A: TMultiUBool): boolean; inline;
-
-    procedure Create(A: TMultiUBoolState); inline;
-    function ToString: ansistring; inline;
-  end;
+  TMultiUBoolState = MultiInt.Bool.TTriBoolState;
+  TMultiUBool      = MultiInt.Bool.TTriBool;
 
   TMultiIntX2 = record
   private
@@ -612,103 +589,16 @@ function Multi_Int_X4_to_X5_multiply(const A, B: TMultiIntX4): Multi_Int_X5;
   forward; inline;
 function To_Multi_Int_X4(const A: Multi_Int_X5): TMultiIntX4; forward; overload; inline;
 
-(******************************************)
-procedure TMultiUBool.Create(A: TMultiUBoolState);
-begin
-  FValue := A;
-end;
-
-function TMultiUBool.ToString: ansistring;
-begin
-  case FValue of
-    uBoolTrue:
-      Result := 'TRUE';
-    uBoolFalse:
-      Result := 'FALSE';
-    uBoolUndefined:
-      Result := 'UNDEFINED';
-  end;
-end;
-
-class operator TMultiUBool.:=(A: TMultiUBoolState): TMultiUBool;
-begin
-  Result.FValue := A;
-end;
-
-class operator TMultiUBool.:=(A: TMultiUBool): TMultiUBoolState;
-begin
-  Result := A.FValue;
-end;
-
-class operator TMultiUBool.:=(A: boolean): TMultiUBool;
-begin
-  if A then
-    Result.FValue := uBoolTrue
-  else
-    Result.FValue := uBoolFalse;
-end;
-
-class operator TMultiUBool.:=(A: TMultiUBool): boolean;
-begin
-  Result := (A.FValue = uBoolTrue);
-end;
-
-class operator TMultiUBool.=(A, B: TMultiUBool): boolean;
-begin
-  Result := (A.FValue = B.FValue);
-end;
-
-class operator TMultiUBool.<>(A, B: TMultiUBool): boolean;
-begin
-  Result := not (A = B);
-end;
-
-class operator TMultiUBool.or(A, B: TMultiUBool): boolean;
-begin
-  Result := (A.FValue = uBoolTrue) or (B.FValue = uBoolTrue);
-end;
-
-class operator TMultiUBool.or(A: TMultiUBool; B: boolean): boolean;
-begin
-  Result := (A.FValue = uBoolTrue) or B;
-end;
-
-class operator TMultiUBool.or(A: boolean; B: TMultiUBool): boolean;
-begin
-  Result := A or (B.FValue = uBoolTrue);
-end;
-
-class operator TMultiUBool.and(A, B: TMultiUBool): boolean;
-begin
-  Result := (A.FValue = uBoolTrue) and (B.FValue = uBoolTrue);
-end;
-
-class operator TMultiUBool.and(A: TMultiUBool; B: boolean): boolean;
-begin
-  Result := (A.FValue = uBoolTrue) and B;
-end;
-
-class operator TMultiUBool.and(A: boolean; B: TMultiUBool): boolean;
-begin
-  Result := A and (B.FValue = uBoolTrue);
-end;
-
-class operator TMultiUBool.not(A: TMultiUBool): boolean;
-begin
-  Result := not (A.FValue = uBoolTrue);
-end;
-
-
 function LeadingZeroCount(A: INT_1W_U): INT_1W_U;
 var
   n: TMultiInt32;
 begin
   if A = 0 then
-    Exit(16)
     {$ifdef CPU_32}
+    Exit(16);
     {$else}
+    Exit(32);
     {$endif}
-  ;
 
   n := 0;
 
@@ -2154,8 +2044,8 @@ end;
 
 
 (******************************************)
-function TMultiIntX2.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros):
-ansistring;
+function TMultiIntX2.ToBinaryString(
+  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
 begin
   Multi_Int_X2_to_bin(Self, Result, LeadingZeroMode);
 end;
@@ -5396,8 +5286,8 @@ end;
 
 
 (******************************************)
-function TMultiIntX3.ToBinaryString(
-  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
+function TMultiIntX3.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros):
+ansistring;
 begin
   Multi_Int_X3_to_bin(Self, Result, LeadingZeroMode);
 end;
@@ -8921,8 +8811,8 @@ end;
 
 
 (******************************************)
-function TMultiIntX4.ToBinaryString(
-  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
+function TMultiIntX4.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros):
+ansistring;
 begin
   Multi_Int_X4_to_bin(Self, Result, LeadingZeroMode);
 end;
@@ -13057,8 +12947,8 @@ end;
 
 
 (******************************************)
-function TMultiIntXV.ToBinaryString(
-  const LeadingZeroMode: TMultiLeadingZeros): ansistring;
+function TMultiIntXV.ToBinaryString(const LeadingZeroMode: TMultiLeadingZeros):
+ansistring;
 begin
   Multi_Int_XV_to_bin(Self, Result, LeadingZeroMode);
 end;
